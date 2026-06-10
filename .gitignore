@@ -1,0 +1,23 @@
+# CodeIgniter 4
+vendor/
+.env
+writable/cache/*
+writable/logs/*
+!writable/cache/.htaccess
+!writable/logs/.htaccess
+writable/debugbar/*
+writable/session/*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Composer
+composer.lock

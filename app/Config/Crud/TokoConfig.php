@@ -1,0 +1,108 @@
+<?php
+
+namespace App\Config\Crud;
+
+use App\Config\Crud\TableConfig;
+
+return new TableConfig([
+    'name' => 'toko',
+    'title' => 'Toko',
+    'route' => '/toko',
+    'model' => 'TokoModel',
+    'controller' => 'Toko',
+    'autoCode' => 'kode_toko',
+    'autoCodePrefix' => 'TKO',
+    'orderBy' => 'id',
+    'orderDir' => 'DESC',
+    'fields' => [
+        [
+            'name' => 'id',
+            'label' => 'No',
+            'type' => 'text',
+            'showInTable' => true,
+            'showInForm' => false,
+        ],
+        [
+            'name' => 'kode_toko',
+            'label' => 'Kode',
+            'type' => 'text',
+            'showInTable' => true,
+            'showInForm' => true,
+        ],
+        [
+            'name' => 'nama',
+            'label' => 'Nama Toko',
+            'type' => 'text',
+            'showInTable' => true,
+            'showInForm' => true,
+            'required' => true,
+            'validation' => 'required',
+            'placeholder' => 'Masukkan nama toko',
+        ],
+        [
+            'name' => 'pemilik',
+            'label' => 'Pemilik',
+            'type' => 'text',
+            'showInTable' => true,
+            'showInForm' => true,
+            'placeholder' => 'Nama pemilik toko',
+        ],
+        [
+            'name' => 'alamat',
+            'label' => 'Alamat',
+            'type' => 'textarea',
+            'showInTable' => false,
+            'showInForm' => true,
+            'placeholder' => 'Masukkan alamat lengkap',
+        ],
+        [
+            'name' => 'kelurahan',
+            'label' => 'Kelurahan',
+            'type' => 'text',
+            'showInTable' => false,
+            'showInForm' => true,
+            'placeholder' => 'Kelurahan',
+        ],
+        [
+            'name' => 'kecamatan',
+            'label' => 'Kecamatan',
+            'type' => 'text',
+            'showInTable' => false,
+            'showInForm' => true,
+            'placeholder' => 'Kecamatan',
+        ],
+        [
+            'name' => 'kota',
+            'label' => 'Kota',
+            'type' => 'text',
+            'showInTable' => true,
+            'showInForm' => true,
+            'placeholder' => 'Kota',
+        ],
+        [
+            'name' => 'telepon',
+            'label' => 'Telepon',
+            'type' => 'text',
+            'showInTable' => true,
+            'showInForm' => true,
+            'placeholder' => '021-xxxxxxx',
+        ],
+        [
+            'name' => 'sales_id',
+            'label' => 'Sales',
+            'type' => 'select',
+            'showInTable' => true,
+            'showInForm' => true,
+            'relationModel' => 'UserModel',
+            'relationField' => 'nama',
+            'relationValue' => 'id',
+        ],
+        [
+            'name' => 'is_aktif',
+            'label' => 'Status',
+            'type' => 'boolean',
+            'showInTable' => true,
+            'showInForm' => true,
+        ],
+    ],
+]);

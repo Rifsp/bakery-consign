@@ -1,0 +1,100 @@
+<?php
+
+namespace App\Config\Crud;
+
+use App\Config\Crud\TableConfig;
+
+return new TableConfig([
+    'name' => 'produk',
+    'title' => 'Produk',
+    'route' => '/produk',
+    'model' => 'ProdukModel',
+    'controller' => 'Produk',
+    'autoCode' => 'kode_produk',
+    'autoCodePrefix' => 'PRD',
+    'orderBy' => 'id',
+    'orderDir' => 'DESC',
+    'accessRoles' => ['admin'],
+    'fields' => [
+        [
+            'name' => 'id',
+            'label' => 'No',
+            'type' => 'text',
+            'showInTable' => true,
+            'showInForm' => false,
+        ],
+        [
+            'name' => 'kode_produk',
+            'label' => 'Kode',
+            'type' => 'text',
+            'showInTable' => true,
+            'showInForm' => true,
+        ],
+        [
+            'name' => 'nama',
+            'label' => 'Nama Produk',
+            'type' => 'text',
+            'showInTable' => true,
+            'showInForm' => true,
+            'required' => true,
+            'validation' => 'required',
+            'placeholder' => 'Masukkan nama produk',
+        ],
+        [
+            'name' => 'kategori_id',
+            'label' => 'Kategori',
+            'type' => 'select',
+            'showInTable' => true,
+            'showInForm' => true,
+            'relationModel' => 'KategoriProdukModel',
+            'relationField' => 'nama',
+            'relationValue' => 'id',
+        ],
+        [
+            'name' => 'satuan',
+            'label' => 'Satuan',
+            'type' => 'select',
+            'showInTable' => true,
+            'showInForm' => true,
+            'options' => [
+                'pcs' => 'Pcs',
+                'pack' => 'Pack',
+                'kg' => 'Kg',
+                'gram' => 'Gram',
+                'lusin' => 'Lusin',
+                'box' => 'Box',
+            ],
+        ],
+        [
+            'name' => 'hpp',
+            'label' => 'HPP',
+            'type' => 'number',
+            'showInTable' => true,
+            'showInForm' => true,
+            'placeholder' => '0',
+        ],
+        [
+            'name' => 'shelf_life_hari',
+            'label' => 'Shelf Life (Hari)',
+            'type' => 'integer',
+            'showInTable' => false,
+            'showInForm' => true,
+            'placeholder' => '3',
+        ],
+        [
+            'name' => 'deskripsi',
+            'label' => 'Deskripsi',
+            'type' => 'textarea',
+            'showInTable' => false,
+            'showInForm' => true,
+            'placeholder' => 'Deskripsi produk',
+        ],
+        [
+            'name' => 'is_aktif',
+            'label' => 'Status',
+            'type' => 'boolean',
+            'showInTable' => true,
+            'showInForm' => true,
+        ],
+    ],
+]);
