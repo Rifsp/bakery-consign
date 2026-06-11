@@ -6,7 +6,7 @@
     </div>
     <div class="card shadow mb-4">
         <div class="card-header">
-            <form class="form-inline" method="GET">
+            <form class="row g-2 align-items-center" method="GET">
                 <input type="date" name="tgl_dari" class="form-control mr-2" value="<?= $tglDari ?>">
                 <input type="date" name="tgl_sampai" class="form-control mr-2" value="<?= $tglSampai ?>">
                 <select name="sales_id" class="form-control mr-2">
@@ -20,7 +20,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered table-sm">
+                <table class="table table-bordered table-sm table-datatable">
                     <thead><tr><th>No</th><th>Sales</th><th>Tgl</th><th>Toko</th><th>Produk</th><th>Qty</th><th>Fee Satuan</th><th>Total Fee</th></tr></thead>
                     <tbody>
                         <?php foreach ($records as $i => $r): ?>
@@ -35,7 +35,6 @@
                             <td class="text-right"><?= number_format($r['total_fee'], 0, ',', '.') ?></td>
                         </tr>
                         <?php endforeach; ?>
-                        <?php if (empty($records)): ?><tr><td colspan="99" class="text-center">Tidak ada data</td></tr><?php endif; ?>
                     </tbody>
                 </table>
             </div>

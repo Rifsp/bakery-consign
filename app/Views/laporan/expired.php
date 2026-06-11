@@ -7,7 +7,7 @@
     </div>
     <div class="card shadow mb-4">
         <div class="card-header">
-            <form class="form-inline" method="GET">
+            <form class="row g-2 align-items-center" method="GET">
                 <select name="toko_id" class="form-control mr-2">
                     <option value="">Semua Toko</option>
                     <?php foreach ($tokoList as $t): ?>
@@ -23,7 +23,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered table-sm">
+                <table class="table table-bordered table-sm table-datatable">
                     <thead><tr><th>No</th><th>Toko</th><th>Produk</th><th>Jml Titip</th><th>Stok Toko</th><th>Tgl Expired</th><th>Status</th></tr></thead>
                     <tbody>
                         <?php foreach ($records as $i => $r): ?>
@@ -46,7 +46,6 @@
                             </td>
                         </tr>
                         <?php endforeach; ?>
-                        <?php if (empty($records)): ?><tr><td colspan="99" class="text-center">Tidak ada data</td></tr><?php endif; ?>
                     </tbody>
                 </table>
             </div>

@@ -10,13 +10,6 @@
         </a>
     </div>
 
-    <?php if (session()->getFlashdata('error')): ?>
-        <div class="alert alert-danger alert-dismissible fade show">
-            <?= session()->getFlashdata('error') ?>
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-        </div>
-    <?php endif; ?>
-
     <div class="card shadow mb-4">
         <div class="card-header">
             <strong>Supplier:</strong> <?= esc($po['supplier_nama'] ?? '-') ?> &nbsp;|&nbsp;

@@ -27,9 +27,4 @@
         </td>
     </tr>
     <?php endforeach; ?>
-    <?php if (empty($records)): ?>
-    <tr>
-        <td colspan="99" class="text-center">Tidak ada data</td>
-    </tr>
-    <?php endif; ?>
 </tbody>

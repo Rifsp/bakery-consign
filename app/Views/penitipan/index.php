@@ -10,23 +10,9 @@
         </a>
     </div>
 
-    <?php if (session()->getFlashdata('success')): ?>
-        <div class="alert alert-success alert-dismissible fade show">
-            <?= session()->getFlashdata('success') ?>
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-        </div>
-    <?php endif; ?>
-    <?php if (session()->getFlashdata('error')): ?>
-        <div class="alert alert-danger alert-dismissible fade show">
-            <?= session()->getFlashdata('error') ?>
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-        </div>
-    <?php endif; ?>
-
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <div class="form-inline">
-                <input type="text" id="searchInput" class="form-control mr-2" placeholder="Cari nomor titip atau toko..." value="<?= $search ?? '' ?>" style="width:250px">
+            <div class="row g-2 align-items-center">
                 <select id="tokoFilter" class="form-control mr-2">
                     <option value="">Semua Toko</option>
                     <?php foreach ($tokoList as $t): ?>
@@ -40,7 +26,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered" width="100%" cellspacing="0">
+                <table class="table table-bordered table-datatable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -59,23 +45,18 @@
                     ]) ?>
                 </table>
             </div>
-            <div class="mt-3" id="paginationWrap">
-                <?= $pager->links('default', 'bootstrap_pagination') ?>
-            </div>
+
         </div>
     </div>
 </div>
 
 <script>
-const searchInput = document.getElementById('searchInput');
 const tokoFilter = document.getElementById('tokoFilter');
 const tglDari = document.getElementById('tglDari');
 const tglSampai = document.getElementById('tglSampai');
 
 function getParams(page) {
     const params = new URLSearchParams();
-    const searchVal = searchInput.value.trim();
-    if (searchVal) params.set('search', searchVal);
     if (tokoFilter.value) params.set('toko_id', tokoFilter.value);
     params.set('tgl_dari', tglDari.value);
     params.set('tgl_sampai', tglSampai.value);
@@ -92,22 +73,21 @@ async function loadData(page) {
     const oldTbody = document.getElementById('tableBody');
     if (oldTbody) oldTbody.outerHTML = data.table;
 
-    const oldPag = document.getElementById('paginationWrap');
-    if (oldPag) oldPag.outerHTML = data.pagination;
-
-    attachPaginationListeners();
     history.replaceState(null, '', '<?= base_url('/penitipan') ?>?' + params.toString());
+    reinitDataTable();
 }
 
-function attachPaginationListeners() {
-    document.querySelectorAll('#paginationWrap a[href]').forEach(a => {
-        if (a.href.includes('page=')) {
-            a.addEventListener('click', function(e) {
-                e.preventDefault();
-                const url = new URL(this.href);
-                loadData(url.searchParams.get('page'));
-            });
-        }
+function reinitDataTable() {
+    var table = $('.table-datatable');
+    if ($.fn.DataTable.isDataTable(table)) {
+        table.DataTable().destroy();
+    }
+    table.DataTable({
+        language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json' },
+        pageLength: 25,
+        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, 'Semua']],
+        order: [],
+        columnDefs: [{ orderable: false, targets: -1 }]
     });
 }
 
@@ -117,10 +97,8 @@ function onFilterChange() {
     debounceTimer = setTimeout(() => loadData(), 300);
 }
 
-searchInput.addEventListener('input', onFilterChange);
 tokoFilter.addEventListener('change', onFilterChange);
 tglDari.addEventListener('change', onFilterChange);
 tglSampai.addEventListener('change', onFilterChange);
-attachPaginationListeners();
 </script>
 <?= $this->endSection() ?>

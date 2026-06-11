@@ -78,8 +78,7 @@ class Retur extends BaseController
 
         $data = [
             'title' => 'Retur',
-            'records' => $this->returModel->paginate(15),
-            'pager' => $this->returModel->pager,
+            'records' => $this->returModel->findAll(),
             'status' => $status,
             'search' => $search,
             'tglDari' => $tglDari,
@@ -95,8 +94,7 @@ class Retur extends BaseController
         $this->checkAccess();
         $this->buildFilterQuery();
 
-        $records = $this->returModel->paginate(15);
-        $pager = $this->returModel->pager;
+        $records = $this->returModel->findAll();
 
         $statusLabels = [
             'pending' => ['label' => 'Pending', 'class' => 'bg-warning text-dark'],
@@ -111,7 +109,6 @@ class Retur extends BaseController
 
         return $this->response->setJSON([
             'table'      => $tableHtml,
-            'pagination' => '<div class="mt-3" id="paginationWrap">' . $pager->links('default', 'bootstrap_pagination') . '</div>',
         ]);
     }
 

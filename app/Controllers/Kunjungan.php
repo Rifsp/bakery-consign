@@ -95,8 +95,7 @@ class Kunjungan extends BaseController
 
         $data = [
             'title' => 'Kunjungan',
-            'records' => $this->kunjunganModel->paginate(15),
-            'pager' => $this->kunjunganModel->pager,
+            'records' => $this->kunjunganModel->findAll(),
             'status' => $status,
             'search' => $search,
             'tglDari' => $tglDari,
@@ -112,8 +111,7 @@ class Kunjungan extends BaseController
         $this->checkAccess();
         $this->buildFilterQuery();
 
-        $records = $this->kunjunganModel->paginate(15);
-        $pager = $this->kunjunganModel->pager;
+        $records = $this->kunjunganModel->findAll();
 
         $statusLabels = [
             'pending' => ['label' => 'Pending', 'class' => 'bg-warning text-dark'],
@@ -127,7 +125,6 @@ class Kunjungan extends BaseController
 
         return $this->response->setJSON([
             'table'      => $tableHtml,
-            'pagination' => '<div class="mt-3" id="paginationWrap">' . $pager->links('default', 'bootstrap_pagination') . '</div>',
         ]);
     }
 

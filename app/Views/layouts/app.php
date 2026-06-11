@@ -1,6 +1,10 @@
 <?php
 $role = session()->get('role');
 $nama = session()->get('nama');
+$flashSuccess = session()->getFlashdata('success');
+$flashError   = session()->getFlashdata('error');
+$flashWarning = session()->getFlashdata('warning');
+$flashInfo    = session()->getFlashdata('info');
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -8,21 +12,26 @@ $nama = session()->get('nama');
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title><?= $title ?? 'Bakery System' ?></title>
+    <title><?= $title ? $title . ' — DIANTRA BAKERY' : 'DIANTRA BAKERY ' ?></title>
     <link href="<?= base_url('templates/sb-admin/dist/css/styles.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('css/custom.css') ?>" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 <body class="sb-nav-fixed">
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <a class="navbar-brand ps-3" href="<?= base_url('dashboard') ?>">Bakery System</a>
+    <div id="pageLoader" class="page-loader"><div class="bakery-spinner"></div></div>
+
+    <nav class="sb-topnav navbar navbar-expand navbar-dark">
+        <a class="navbar-brand ps-3" href="<?= base_url('dashboard') ?>">
+            <i class="fas fa-bread-slice"></i> DIANTRA BAKERY
+        </a>
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle"><i class="fas fa-bars"></i></button>
         <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown">
-                    <i class="fas fa-user fa-fw"></i> <?= esc($nama ?? 'User') ?> (<?= esc($role ?? '') ?>)
+                    <i class="fas fa-user-circle fa-fw"></i> <?= esc($nama ?? 'User') ?>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="<?= base_url('logout') ?>">Logout</a></li>
+                    <li><a class="dropdown-item" href="<?= base_url('logout') ?>"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</a></li>
                 </ul>
             </li>
         </ul>
@@ -34,7 +43,7 @@ $nama = session()->get('nama');
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">Menu</div>
                         <a class="nav-link" href="<?= base_url('dashboard') ?>">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-th-large"></i></div>
                             Dashboard
                         </a>
 
@@ -70,7 +79,7 @@ $nama = session()->get('nama');
                             Kunjungan
                         </a>
                         <a class="nav-link" href="<?= base_url('penitipan') ?>">
-                            <div class="sb-nav-link-icon"><i class="fas fa-hand-holding-box"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-people-arrows"></i></div>
                             Penitipan
                         </a>
                         <?php if ($role === 'admin'): ?>
@@ -152,13 +161,19 @@ $nama = session()->get('nama');
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
+                    <div id="flash-data"
+                         data-success="<?= esc($flashSuccess ?? '') ?>"
+                         data-error="<?= esc($flashError ?? '') ?>"
+                         data-warning="<?= esc($flashWarning ?? '') ?>"
+                         data-info="<?= esc($flashInfo ?? '') ?>"
+                         style="display:none"></div>
                     <?= $this->renderSection('content') ?>
                 </div>
             </main>
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
                     <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Bakery System 2024</div>
+                        <div class="text-muted">&copy; <?= date('Y') ?> DIANTRA BAKERY APP</div>
                     </div>
                 </div>
             </footer>
@@ -166,5 +181,11 @@ $nama = session()->get('nama');
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="<?= base_url('templates/sb-admin/dist/js/scripts.js') ?>"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" crossorigin="anonymous"></script>
+    <script src="<?= base_url('js/custom.js') ?>"></script>
+    <?= $this->renderSection('scripts') ?>
 </body>
 </html>

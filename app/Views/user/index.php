@@ -10,23 +10,9 @@
         </a>
     </div>
 
-    <?php if (session()->getFlashdata('success')): ?>
-    <div class="alert alert-success alert-dismissible fade show">
-        <?= session()->getFlashdata('success') ?>
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-    </div>
-    <?php endif; ?>
-
-    <?php if (session()->getFlashdata('error')): ?>
-    <div class="alert alert-danger alert-dismissible fade show">
-        <?= session()->getFlashdata('error') ?>
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-    </div>
-    <?php endif; ?>
-
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <form method="GET" class="form-inline">
+            <form method="GET" class="row g-2 align-items-center">
                 <div class="input-group mr-2">
                     <input type="text" class="form-control" name="search" placeholder="Cari nama/username/email" value="<?= esc($search) ?>">
                     <div class="input-group-append">
@@ -42,7 +28,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered table-sm">
+                <table class="table table-bordered table-sm table-datatable">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -71,19 +57,19 @@
                             </td>
                             <td>
                                 <a href="<?= base_url('/user/edit/' . $r['id']) ?>" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
-                                <a href="<?= base_url('/user/delete/' . $r['id']) ?>" class="btn btn-sm btn-<?= $r['is_aktif'] ? 'danger' : 'success' ?>" onclick="return confirm('<?= $r['is_aktif'] ? 'Nonaktifkan' : 'Aktifkan' ?> user ini?')">
-                                    <i class="fas fa-<?= $r['is_aktif'] ? 'ban' : 'check' ?>"></i>
-                                </a>
+                                <form action="<?= base_url('/user/delete/' . $r['id']) ?>" method="POST" style="display:inline">
+                                    <?= csrf_field() ?>
+                                    <button type="submit" class="btn btn-sm btn-<?= $r['is_aktif'] ? 'danger' : 'success' ?> btn-delete-confirm" data-confirm="<?= $r['is_aktif'] ? 'Nonaktifkan' : 'Aktifkan' ?> user ini?">
+                                        <i class="fas fa-<?= $r['is_aktif'] ? 'ban' : 'check' ?>"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         <?php endforeach; ?>
-                        <?php if (empty($records)): ?><tr><td colspan="99" class="text-center">Tidak ada data</td></tr><?php endif; ?>
                     </tbody>
                 </table>
             </div>
-            <?php if ($pager): ?>
-            <div class="mt-3"><?= $pager->links('default', 'bootstrap_pagination') ?></div>
-            <?php endif; ?>
+
         </div>
     </div>
 </div>

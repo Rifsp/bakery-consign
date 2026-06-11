@@ -9,16 +9,6 @@
 
     <div class="card shadow mb-4">
         <div class="card-body">
-            <?php if (session()->getFlashdata('errors')): ?>
-            <div class="alert alert-danger">
-                <ul class="mb-0">
-                    <?php foreach (session()->getFlashdata('errors') as $error): ?>
-                    <li><?= esc($error) ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-            <?php endif; ?>
-
             <form action="<?= base_url('/user/' . ($record ? 'update' : 'store') . ($record ? '/' . $record['id'] : '')) ?>" method="POST">
                 <?= csrf_field() ?>
 

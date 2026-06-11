@@ -6,7 +6,7 @@
     </div>
     <div class="card shadow mb-4">
         <div class="card-header">
-            <form class="form-inline" method="GET">
+            <form class="row g-2 align-items-center" method="GET">
                 <input type="date" name="tgl_dari" class="form-control mr-2" value="<?= $tglDari ?>">
                 <input type="date" name="tgl_sampai" class="form-control mr-2" value="<?= $tglSampai ?>">
                 <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-filter"></i> Filter</button>
@@ -14,7 +14,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered table-sm">
+                <table class="table table-bordered table-sm table-datatable">
                     <thead><tr><th>No</th><th>Nomor Jual</th><th>Tgl</th><th>Toko</th><th>Total Harga</th><th>Aksi</th></tr></thead>
                     <tbody>
                         <?php foreach ($records as $i => $r): ?>
@@ -27,7 +27,6 @@
                             <td><a href="<?= base_url('/kunjungan/detail/' . $r['kunjungan_id']) ?>" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a></td>
                         </tr>
                         <?php endforeach; ?>
-                        <?php if (empty($records)): ?><tr><td colspan="99" class="text-center">Tidak ada data</td></tr><?php endif; ?>
                     </tbody>
                 </table>
             </div>

@@ -98,8 +98,7 @@ class Penitipan extends BaseController
 
         $data = [
             'title' => 'Penitipan',
-            'records' => $this->penitipanModel->paginate(15),
-            'pager' => $this->penitipanModel->pager,
+            'records' => $this->penitipanModel->findAll(),
             'tokoList' => $tokoList,
             'filterToko' => $filterToko,
             'search' => $search,
@@ -116,8 +115,7 @@ class Penitipan extends BaseController
         $this->checkAccess();
         $this->buildFilterQuery();
 
-        $records = $this->penitipanModel->paginate(15);
-        $pager = $this->penitipanModel->pager;
+        $records = $this->penitipanModel->findAll();
 
         $statusLabels = [
             'aktif' => ['label' => 'Aktif', 'class' => 'bg-success'],
@@ -132,7 +130,6 @@ class Penitipan extends BaseController
 
         return $this->response->setJSON([
             'table'      => $tableHtml,
-            'pagination' => '<div class="mt-3" id="paginationWrap">' . $pager->links('default', 'bootstrap_pagination') . '</div>',
         ]);
     }
 

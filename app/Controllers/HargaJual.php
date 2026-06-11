@@ -36,13 +36,18 @@ class HargaJual extends BaseCrudController
         $search = $this->request->getGet('search');
         $filters = ['produk_id' => $produkId];
 
-        $result = $this->model->getPaginatedData($filters, $search);
+        $this->model->where($filters);
+        if ($search) {
+            $this->model->groupStart()
+                ->like('nama_harga', $search)
+                ->groupEnd();
+        }
+        $records = $this->model->findAll();
 
         $data = [
             'title' => 'Harga Jual: ' . $produk['nama'],
             'config' => $this->tableConfig,
-            'records' => $result['data'],
-            'pager' => $result['pager'],
+            'records' => $records,
             'search' => $search,
             'produk' => $produk,
         ];

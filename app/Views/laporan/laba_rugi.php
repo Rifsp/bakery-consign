@@ -7,7 +7,7 @@
     </div>
     <div class="card shadow mb-4">
         <div class="card-header">
-            <form class="form-inline" method="GET">
+            <form class="row g-2 align-items-center" method="GET">
                 <input type="date" name="tgl_dari" class="form-control mr-2" value="<?= $tglDari ?>">
                 <input type="date" name="tgl_sampai" class="form-control mr-2" value="<?= $tglSampai ?>">
                 <select name="sales_id" class="form-control mr-2">
@@ -33,7 +33,7 @@
                 <div class="col-md-3"><div class="card bg-success text-white p-3"><h5>Laba Bersih</h5><h3>Rp <?= number_format($summary['total_laba'], 0, ',', '.') ?></h3></div></div>
             </div>
             <div class="table-responsive">
-                <table class="table table-bordered table-sm" id="dataTable">
+                <table class="table table-bordered table-sm table-datatable" id="dataTable">
                     <thead><tr><th>No</th><th>Tgl</th><th>Toko</th><th>Sales</th><th>Produk</th><th>Qty</th><th>Harga</th><th>Fee</th><th>HPP</th><th>Subtotal</th><th>Laba</th></tr></thead>
                     <tbody>
                         <?php foreach ($records as $i => $r): ?>
@@ -51,7 +51,6 @@
                             <td class="text-right <?= $r['laba_bersih'] < 0 ? 'text-danger' : '' ?>"><?= number_format($r['laba_bersih'], 0, ',', '.') ?></td>
                         </tr>
                         <?php endforeach; ?>
-                        <?php if (empty($records)): ?><tr><td colspan="99" class="text-center">Tidak ada data</td></tr><?php endif; ?>
                     </tbody>
                 </table>
             </div>

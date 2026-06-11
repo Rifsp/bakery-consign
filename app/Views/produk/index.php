@@ -10,36 +10,10 @@
         </a>
     </div>
 
-    <?php if (session()->getFlashdata('success')): ?>
-        <div class="alert alert-success alert-dismissible fade show">
-            <?= session()->getFlashdata('success') ?>
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-        </div>
-    <?php endif; ?>
-
-    <?php if (session()->getFlashdata('error')): ?>
-        <div class="alert alert-danger alert-dismissible fade show">
-            <?= session()->getFlashdata('error') ?>
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-        </div>
-    <?php endif; ?>
-
     <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <form method="GET" class="form-inline">
-                <div class="input-group">
-                    <input type="text" name="search" class="form-control" placeholder="Cari..." value="<?= $search ?? '' ?>">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-secondary">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered" width="100%" cellspacing="0">
+                <table class="table table-bordered table-datatable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -55,14 +29,13 @@
                     <tbody>
                         <?php foreach ($records as $i => $record): ?>
                         <tr>
- <td><?= $i + 1 ?></td>
-                                <td><?= esc($record['kode_produk']) ?></td>
-                                <td><?= esc($record['nama']) ?></td>
-                                <td><?= esc($record['kategori_id']) ?></td>
-                                <td><?= esc($record['satuan']) ?></td>
-                                <td><?= esc($record['hpp']) ?></td>
-                                <td><?= $record['is_aktif'] ? '<span class="badge badge-success">Aktif</span>' : '<span class="badge badge-secondary">Nonaktif</span>' ?></td>
-
+                            <td><?= $i + 1 ?></td>
+                            <td><?= esc($record['kode_produk']) ?></td>
+                            <td><?= esc($record['nama']) ?></td>
+                            <td><?= esc($record['kategori_id']) ?></td>
+                            <td><?= esc($record['satuan']) ?></td>
+                            <td><?= esc($record['hpp']) ?></td>
+                            <td><?= $record['is_aktif'] ? '<span class="badge badge-success">Aktif</span>' : '<span class="badge badge-secondary">Nonaktif</span>' ?></td>
                             <td>
                                 <a href="<?= base_url('/produk/edit/' . $record['id']) ?>" class="btn btn-sm btn-primary" title="Edit">
                                     <i class="fas fa-edit"></i>
@@ -70,25 +43,17 @@
                                 <a href="<?= base_url('/harga-jual?produk_id=' . $record['id']) ?>" class="btn btn-sm btn-info" title="Harga Jual">
                                     <i class="fas fa-tag"></i>
                                 </a>
-                                <form action="<?= base_url('/produk/delete/' . $record['id']) ?>" method="POST" style="display:inline" onsubmit="return confirm('Yakin hapus?')">
+                                <form action="<?= base_url('/produk/delete/' . $record['id']) ?>" method="POST" style="display:inline">
                                     <?= csrf_field() ?>
-                                    <button type="submit" class="btn btn-sm btn-danger">
+                                    <button type="submit" class="btn btn-sm btn-danger btn-delete-confirm" data-confirm="Yakin hapus data ini?">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
                             </td>
                         </tr>
                         <?php endforeach; ?>
-                        <?php if (empty($records)): ?>
-                        <tr>
-                            <td colspan="99" class="text-center">Tidak ada data</td>
-                        </tr>
-                        <?php endif; ?>
-</tbody>
+                    </tbody>
                 </table>
-            </div>
-            <div class="mt-3">
-                <?= $pager->links('default', 'bootstrap_pagination') ?>
             </div>
         </div>
     </div>

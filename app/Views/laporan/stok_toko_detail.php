@@ -8,7 +8,7 @@
     <div class="card shadow mb-4">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered table-sm">
+                <table class="table table-bordered table-sm table-datatable">
                     <thead><tr><th>No</th><th>Produk</th><th>Satuan</th><th>Stok</th><th>Update</th></tr></thead>
                     <tbody>
                         <?php foreach ($records as $i => $r): ?>
@@ -20,7 +20,6 @@
                             <td><?= $r['updated_at'] ?></td>
                         </tr>
                         <?php endforeach; ?>
-                        <?php if (empty($records)): ?><tr><td colspan="99" class="text-center">Tidak ada data</td></tr><?php endif; ?>
                     </tbody>
                 </table>
             </div>

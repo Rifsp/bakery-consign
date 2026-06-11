@@ -15,26 +15,12 @@
         </div>
     </div>
 
-    <?php if (session()->getFlashdata('success')): ?>
-        <div class="alert alert-success alert-dismissible fade show">
-            <?= session()->getFlashdata('success') ?>
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-        </div>
-    <?php endif; ?>
-
-    <?php if (session()->getFlashdata('error')): ?>
-        <div class="alert alert-danger alert-dismissible fade show">
-            <?= session()->getFlashdata('error') ?>
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-        </div>
-    <?php endif; ?>
-
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex align-items-center">
             <div class="mr-3">
                 <strong>Produk:</strong> <?= esc($produk['nama']) ?> (<?= esc($produk['kode_produk']) ?>)
             </div>
-            <form method="GET" class="form-inline ml-auto">
+            <form method="GET" class="row g-2 align-items-center ms-auto">
                 <input type="hidden" name="produk_id" value="<?= $produk['id'] ?>">
                 <div class="input-group">
                     <input type="text" name="search" class="form-control" placeholder="Cari..." value="<?= $search ?? '' ?>">
@@ -48,7 +34,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered" width="100%" cellspacing="0">
+                <table class="table table-bordered table-datatable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -71,26 +57,19 @@
                                 <a href="<?= base_url('/harga-jual/edit/' . $record['id']) ?>" class="btn btn-sm btn-primary">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="<?= base_url('/harga-jual/delete/' . $record['id']) ?>" method="POST" style="display:inline" onsubmit="return confirm('Yakin hapus?')">
+                                <form action="<?= base_url('/harga-jual/delete/' . $record['id']) ?>" method="POST" style="display:inline">
                                     <?= csrf_field() ?>
-                                    <button type="submit" class="btn btn-sm btn-danger">
+                                    <button type="submit" class="btn btn-sm btn-danger btn-delete-confirm" data-confirm="Yakin hapus data ini?">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
                             </td>
                         </tr>
                         <?php endforeach; ?>
-                        <?php if (empty($records)): ?>
-                        <tr>
-                            <td colspan="99" class="text-center">Belum ada harga jual untuk produk ini</td>
-                        </tr>
-                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
-            <div class="mt-3">
-                <?= $pager->links('default', 'bootstrap_pagination') ?>
-            </div>
+
         </div>
     </div>
 </div>

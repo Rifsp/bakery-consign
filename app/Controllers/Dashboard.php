@@ -24,6 +24,26 @@ class Dashboard extends BaseController
         $totalPenitipan = $db->query("SELECT COUNT(*) as total FROM penitipan WHERE tanggal_titip = '{$today}'{$filter}")->getRow()->total;
         $totalReturPending = $db->query("SELECT COUNT(*) as total FROM retur WHERE status = 'pending'")->getRow()->total;
 
+        // Last 7 days chart data
+        $chartPenjualan = $db->query("
+            SELECT to_char(pj.tanggal, 'YYYY-MM-DD') as tgl, COALESCE(SUM(pj.total_harga),0) as total
+            FROM penjualan pj
+            WHERE pj.tanggal >= CURRENT_DATE - INTERVAL '6 days' {$filterPj}
+            GROUP BY pj.tanggal ORDER BY pj.tanggal
+        ")->getResultArray();
+
+        // Build complete 7-day series
+        $chartLabels = []; $chartValues = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $d = date('Y-m-d', strtotime("-{$i} days"));
+            $chartLabels[] = date('d/m', strtotime($d));
+            $found = 0;
+            foreach ($chartPenjualan as $r) {
+                if ($r['tgl'] === $d) { $found = (float) $r['total']; break; }
+            }
+            $chartValues[] = $found;
+        }
+
         $penjualanTerbaru = $db->query("
             SELECT pj.id, pj.nomor_jual, pj.tanggal, pj.total_harga, pj.kunjungan_id, t.nama as toko_nama, u.nama as sales_nama
             FROM penjualan pj
@@ -50,6 +70,8 @@ class Dashboard extends BaseController
             'totalReturPending' => $totalReturPending,
             'penjualanTerbaru' => $penjualanTerbaru,
             'kunjunganTerbaru' => $kunjunganTerbaru,
+            'chartLabels' => $chartLabels,
+            'chartValues' => $chartValues,
         ];
 
         return view('dashboard', $data);

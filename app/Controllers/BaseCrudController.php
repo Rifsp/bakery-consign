@@ -18,10 +18,9 @@ class BaseCrudController extends BaseController
         $this->checkAccess();
 
         $search = $this->request->getGet('search');
-        $page = (int)($this->request->getGet('page') ?? 1);
         $filters = $this->request->getGet();
 
-        unset($filters['search'], $filters['page']);
+        unset($filters['search']);
 
         $result = $this->model->getPaginatedData($filters, $search);
 
@@ -29,7 +28,6 @@ class BaseCrudController extends BaseController
             'title' => $this->tableConfig->title,
             'config' => $this->tableConfig,
             'records' => $result['data'],
-            'pager' => $result['pager'],
             'search' => $search,
             'filters' => $filters,
         ];

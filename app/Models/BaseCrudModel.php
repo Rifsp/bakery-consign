@@ -80,8 +80,7 @@ class BaseCrudModel extends Model
         $builder->orderBy($orderBy, $this->tableConfig->orderDir);
 
         return [
-            'data' => $this->paginate($this->tableConfig->perPage),
-            'pager' => $this->pager,
+            'data' => $this->findAll(),
         ];
     }
 

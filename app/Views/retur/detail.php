@@ -10,19 +10,6 @@
         </a>
     </div>
 
-    <?php if (session()->getFlashdata('success')): ?>
-        <div class="alert alert-success alert-dismissible fade show">
-            <?= session()->getFlashdata('success') ?>
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-        </div>
-    <?php endif; ?>
-    <?php if (session()->getFlashdata('error')): ?>
-        <div class="alert alert-danger alert-dismissible fade show">
-            <?= session()->getFlashdata('error') ?>
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-        </div>
-    <?php endif; ?>
-
     <div class="card shadow mb-4">
         <div class="card-header">
             <div class="row">
@@ -72,13 +59,13 @@
             <?php if ($header['status'] === 'pending'): ?>
             <div class="row mt-3">
                 <div class="col-12">
-                    <form action="<?= base_url('/retur/approve/' . $header['id']) ?>" method="POST" style="display:inline" onsubmit="return confirm('Setujui retur ini? Stok akan diproses.')">
+                    <form action="<?= base_url('/retur/approve/' . $header['id']) ?>" method="POST" style="display:inline">
                         <?= csrf_field() ?>
-                        <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Setujui</button>
+                        <button type="submit" class="btn btn-success btn-delete-confirm" data-confirm="Setujui retur ini? Stok akan diproses."><i class="fas fa-check"></i> Setujui</button>
                     </form>
-                    <form action="<?= base_url('/retur/reject/' . $header['id']) ?>" method="POST" style="display:inline" onsubmit="return confirm('Tolak retur ini?')">
+                    <form action="<?= base_url('/retur/reject/' . $header['id']) ?>" method="POST" style="display:inline">
                         <?= csrf_field() ?>
-                        <button type="submit" class="btn btn-danger"><i class="fas fa-times"></i> Tolak</button>
+                        <button type="submit" class="btn btn-danger btn-delete-confirm" data-confirm="Tolak retur ini?"><i class="fas fa-times"></i> Tolak</button>
                     </form>
                 </div>
             </div>

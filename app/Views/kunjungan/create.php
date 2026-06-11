@@ -7,19 +7,6 @@
         <h1 class="h3 mb-0 text-gray-800">Buat Kunjungan</h1>
     </div>
 
-    <?php if (session()->getFlashdata('errors')): ?>
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                <?php foreach (session()->getFlashdata('errors') as $error): ?>
-                    <li><?= $error ?></li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    <?php endif; ?>
-    <?php if (session()->getFlashdata('error')): ?>
-        <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
-    <?php endif; ?>
-
     <div class="card shadow mb-4">
         <div class="card-body">
             <form action="<?= base_url('/kunjungan/store') ?>" method="POST">

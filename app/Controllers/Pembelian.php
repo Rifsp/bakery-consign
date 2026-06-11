@@ -61,8 +61,7 @@ class Pembelian extends BaseController
 
         $data = [
             'title' => 'Data Pembelian',
-            'records' => $this->pembelianModel->paginate(15),
-            'pager' => $this->pembelianModel->pager,
+            'records' => $this->pembelianModel->findAll(),
             'status' => $status,
             'search' => $search,
             'tglDari' => $tglDari,
@@ -78,18 +77,14 @@ class Pembelian extends BaseController
 
         $this->buildFilterQuery();
 
-        $records = $this->pembelianModel->paginate(15);
-        $pager = $this->pembelianModel->pager;
+        $records = $this->pembelianModel->findAll();
 
         $tableHtml = view('pembelian/_table_data', [
             'records' => $records,
         ]);
 
-        $paginationHtml = $pager->links('default', 'bootstrap_pagination');
-
         return $this->response->setJSON([
             'table'      => $tableHtml,
-            'pagination' => '<div class="mt-3" id="paginationWrap">' . $paginationHtml . '</div>',
         ]);
     }
 

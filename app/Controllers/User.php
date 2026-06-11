@@ -35,8 +35,7 @@ class User extends BaseController
 
         $data = [
             'title' => 'User',
-            'records' => $query->orderBy('id', 'DESC')->paginate(15),
-            'pager' => $this->userModel->pager,
+            'records' => $query->orderBy('id', 'DESC')->findAll(),
             'search' => $search,
             'filterRole' => $role,
         ];

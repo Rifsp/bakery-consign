@@ -69,8 +69,7 @@ class PengirimanKeSales extends BaseController
 
         $data = [
             'title' => 'Pengiriman ke Sales',
-            'records' => $this->pengirimanModel->paginate(15),
-            'pager' => $this->pengirimanModel->pager,
+            'records' => $this->pengirimanModel->findAll(),
             'salesList' => $salesList,
             'salesId' => $salesId,
             'search' => $search,
@@ -87,14 +86,12 @@ class PengirimanKeSales extends BaseController
 
         $this->buildFilterQuery();
 
-        $records = $this->pengirimanModel->paginate(15);
-        $pager = $this->pengirimanModel->pager;
+        $records = $this->pengirimanModel->findAll();
 
         $tableHtml = view('pengiriman_ke_sales/_table_data', ['records' => $records]);
 
         return $this->response->setJSON([
             'table'      => $tableHtml,
-            'pagination' => '<div class="mt-3" id="paginationWrap">' . $pager->links('default', 'bootstrap_pagination') . '</div>',
         ]);
     }
 
