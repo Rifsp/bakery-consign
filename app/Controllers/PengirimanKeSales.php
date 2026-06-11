@@ -68,7 +68,7 @@ class PengirimanKeSales extends BaseController
         $salesList = $salesModel->where('role', 'sales')->where('is_aktif', true)->findAll();
 
         $data = [
-            'title' => 'Pengiriman ke Sales',
+            'title' => 'Transfer ke Sales',
             'records' => $this->pengirimanModel->findAll(),
             'salesList' => $salesList,
             'salesId' => $salesId,
@@ -112,7 +112,7 @@ class PengirimanKeSales extends BaseController
             ->findAll();
 
         $data = [
-            'title' => 'Buat Pengiriman ke Sales',
+            'title' => 'Buat Transfer ke Sales',
             'salesList' => $salesList,
             'produkList' => $produkList,
             'stokGudangAll' => $stokGudangAll,
@@ -221,7 +221,7 @@ class PengirimanKeSales extends BaseController
                 'jumlah' => $jumlah,
                 'referensi_id' => $pengirimanId,
                 'referensi_tabel' => 'pengiriman_ke_sales',
-                'keterangan' => 'Pengiriman ke sales: ' . $nomorKirim,
+                'keterangan' => 'Transfer ke sales: ' . $nomorKirim,
                 'dibuat_oleh' => $userId,
             ]);
 
@@ -241,10 +241,10 @@ class PengirimanKeSales extends BaseController
         $db->transComplete();
 
         if ($db->transStatus() === false) {
-            return redirect()->back()->withInput()->with('error', 'Gagal menyimpan pengiriman');
+            return redirect()->back()->withInput()->with('error', 'Gagal menyimpan transfer');
         }
 
-        return redirect()->to('/pengiriman')->with('success', 'Pengiriman berhasil: ' . $nomorKirim);
+        return redirect()->to('/pengiriman')->with('success', 'Transfer berhasil: ' . $nomorKirim);
     }
 
     public function detail($id)
@@ -265,7 +265,7 @@ class PengirimanKeSales extends BaseController
             ->findAll();
 
         $data = [
-            'title' => 'Detail Pengiriman: ' . $header['nomor_kirim'],
+            'title' => 'Detail Transfer: ' . $header['nomor_kirim'],
             'header' => $header,
             'details' => $details,
         ];
@@ -295,7 +295,7 @@ class PengirimanKeSales extends BaseController
 
         $this->pengirimanModel->delete($id);
 
-        return redirect()->to('/pengiriman')->with('success', 'Pengiriman berhasil dihapus');
+        return redirect()->to('/pengiriman')->with('success', 'Transfer berhasil dihapus');
     }
 
     protected function checkAccess(): void

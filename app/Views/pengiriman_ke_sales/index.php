@@ -4,9 +4,9 @@
 <div class="container-fluid">
 
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Pengiriman ke Sales</h1>
+        <h1 class="h3 mb-0 text-gray-800">Transfer ke Sales</h1>
         <a href="<?= base_url('/pengiriman/create') ?>" class="btn btn-primary btn-sm">
-            <i class="fas fa-plus"></i> Buat Pengiriman
+            <i class="fas fa-plus"></i> Buat Transfer
         </a>
     </div>
 

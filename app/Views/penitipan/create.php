@@ -7,6 +7,28 @@
         <h1 class="h3 mb-0 text-gray-800">Buat Penitipan</h1>
     </div>
 
+    <style>
+    .item-row {
+        background: #fff;
+        padding: .5rem .75rem;
+        margin-bottom: .5rem;
+        border: 1px solid #dee2e6;
+        border-radius: .25rem;
+    }
+    @media (min-width: 768px) {
+        .item-row {
+            padding: .35rem 0;
+            margin-bottom: 0;
+            border: none;
+            border-bottom: 1px solid #f0f0f0;
+            border-radius: 0;
+        }
+        .item-row:last-child {
+            border-bottom: none;
+        }
+    }
+    </style>
+
     <div class="card shadow mb-4">
         <div class="card-body">
             <form action="<?= base_url('/penitipan/store') ?>" method="POST">
@@ -43,63 +65,64 @@
                 <hr>
                 <h5 class="mb-3">Item Produk</h5>
 
-                <div class="table-responsive mb-3">
-                    <table class="table table-bordered" id="itemTable">
-                        <thead>
-                            <tr>
-                                <th style="width:4%">No</th>
-                                <th style="width:22%">Produk</th>
-                                <th style="width:18%">Tier Harga</th>
-                                <th style="width:10%">Qty</th>
-                                <th style="width:12%">Tgl Expired</th>
-                                <th style="width:12%">Stok Sales</th>
-                                <th style="width:10%">Harga</th>
-                                <?php if (session()->get('role') !== 'sales'): ?>
-                                <th style="width:10%">Fee</th>
-                                <?php endif; ?>
-                                <th style="width:2%"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="item-row">
-                                <td class="text-center row-number">1</td>
-                                <td>
-                                    <select name="items[0][produk_id]" class="form-control produk-select" required>
-                                        <option value="">-- Pilih --</option>
-                                        <?php foreach ($produkList as $p): 
-                                            $stok = $stokSalesMap[$p['id']] ?? 0;
-                                            if ($stok <= 0) continue;
-                                        ?>
-                                        <option value="<?= $p['id'] ?>" data-nama="<?= esc($p['nama']) ?>" data-stok="<?= $stok ?>">
-                                            <?= esc($p['kode_produk']) ?> - <?= esc($p['nama']) ?> (stok: <?= $stok ?>)
-                                        </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </td>
-                                <td>
-                                    <select name="items[0][harga_jual_id]" class="form-control tier-select" required disabled>
-                                        <option value="">-- Pilih Produk dulu --</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="number" name="items[0][jumlah_titip]" class="form-control qty" min="1" required>
-                                </td>
-                                <td>
-                                    <input type="date" name="items[0][tgl_expired]" class="form-control tgl-expired" readonly>
-                                </td>
-                                <td class="stok-sales-display text-center">0</td>
-                                <td class="harga-display text-right">0</td>
-                                <?php if (session()->get('role') !== 'sales'): ?>
-                                <td class="fee-display text-right">0</td>
-                                <?php endif; ?>
-                                <td class="text-center">
-                                    <button type="button" class="btn btn-sm btn-danger remove-row" disabled>
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div id="itemsContainer">
+                    <div class="item-row">
+                        <div class="d-flex align-items-center justify-content-between mb-2 d-md-none">
+                            <span class="fw-bold">Item <span class="row-number">1</span></span>
+                            <button type="button" class="btn btn-sm btn-danger remove-row" disabled>
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <div class="row g-2 align-items-center">
+                            <div class="col-12 col-md-4">
+                                <label class="form-label small mb-0 d-md-none">Produk</label>
+                                <select name="items[0][produk_id]" class="form-control form-control-sm produk-select" required>
+                                    <option value="">-- Pilih --</option>
+                                    <?php foreach ($produkList as $p): 
+                                        $stok = $stokSalesMap[$p['id']] ?? 0;
+                                        if ($stok <= 0) continue;
+                                    ?>
+                                    <option value="<?= $p['id'] ?>" data-nama="<?= esc($p['nama']) ?>" data-stok="<?= $stok ?>">
+                                        <?= esc($p['kode_produk']) ?> - <?= esc($p['nama']) ?> (stok: <?= $stok ?>)
+                                    </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label small mb-0 d-md-none">Tier Harga</label>
+                                <select name="items[0][harga_jual_id]" class="form-control form-control-sm tier-select" required disabled>
+                                    <option value="">-- Pilih Produk dulu --</option>
+                                </select>
+                            </div>
+                            <div class="col-6 col-md-2">
+                                <label class="form-label small mb-0 d-md-none">Qty</label>
+                                <input type="number" name="items[0][jumlah_titip]" class="form-control form-control-sm qty" min="1" required>
+                            </div>
+                            <div class="col-6 col-md-2">
+                                <label class="form-label small mb-0 d-md-none">Tgl Expired</label>
+                                <input type="date" name="items[0][tgl_expired]" class="form-control form-control-sm tgl-expired" readonly>
+                            </div>
+                            <div class="col-4 col-md-1 text-center align-self-center">
+                                <small class="d-block d-md-none text-muted">Stok</small>
+                                <span class="stok-sales-display fw-bold">0</span>
+                            </div>
+                            <div class="col-4 col-md-1 text-center align-self-center">
+                                <small class="d-block d-md-none text-muted">Harga</small>
+                                <span class="harga-display fw-bold">0</span>
+                            </div>
+                            <?php if (session()->get('role') !== 'sales'): ?>
+                            <div class="col-4 col-md-1 text-center align-self-center">
+                                <small class="d-block d-md-none text-muted">Fee</small>
+                                <span class="fee-display fw-bold">0</span>
+                            </div>
+                            <?php endif; ?>
+                            <div class="col-12 col-md-1 text-center align-self-center d-none d-md-block">
+                                <button type="button" class="btn btn-sm btn-danger remove-row" disabled>
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <button type="button" class="btn btn-sm btn-success mb-3" id="addRow">
@@ -118,46 +141,73 @@
 const tierCache = {};
 
 document.getElementById('addRow').addEventListener('click', function() {
-    const tbody = document.querySelector('#itemTable tbody');
-    const row = document.createElement('tr');
-    row.className = 'item-row';
-    row.innerHTML = `
-        <td class="text-center row-number">${document.querySelectorAll('.item-row').length + 1}</td>
-        <td>
-            <select name="items[${document.querySelectorAll('.item-row').length}][produk_id]" class="form-control produk-select" required>
-                <option value="">-- Pilih --</option>
-                <?php foreach ($produkList as $p): 
-                    $stok = $stokSalesMap[$p['id']] ?? 0;
-                    if ($stok <= 0) continue;
-                ?>
-                <option value="<?= $p['id'] ?>" data-nama="<?= esc($p['nama']) ?>" data-stok="<?= $stok ?>">
-                    <?= esc($p['kode_produk']) ?> - <?= esc($p['nama']) ?> (stok: <?= $stok ?>)
-                </option>
-                <?php endforeach; ?>
-            </select>
-        </td>
-        <td>
-            <select name="items[${document.querySelectorAll('.item-row').length}][harga_jual_id]" class="form-control tier-select" required disabled>
-                <option value="">-- Pilih Produk dulu --</option>
-            </select>
-        </td>
-        <td><input type="number" name="items[${document.querySelectorAll('.item-row').length}][jumlah_titip]" class="form-control qty" min="1" required></td>
-        <td><input type="date" name="items[${document.querySelectorAll('.item-row').length}][tgl_expired]" class="form-control tgl-expired" readonly></td>
-        <td class="stok-sales-display text-center">0</td>
-        <td class="harga-display text-right">0</td>
-        <?php if (session()->get('role') !== 'sales'): ?>
-        <td class="fee-display text-right">0</td>
-        <?php endif; ?>
-        <td class="text-center">
+    const container = document.querySelector('#itemsContainer');
+    const idx = document.querySelectorAll('.item-row').length;
+    <?php 
+    $role = session()->get('role');
+    $produkOpts = '';
+    foreach ($produkList as $p): 
+        $stok = $stokSalesMap[$p['id']] ?? 0;
+        if ($stok <= 0) continue;
+        $produkOpts .= '<option value="'.$p['id'].'" data-nama="'.esc($p['nama']).'" data-stok="'.$stok.'">'.esc($p['kode_produk']).' - '.esc($p['nama']).' (stok: '.$stok.')</option>';
+    endforeach; 
+    ?>
+    const div = document.createElement('div');
+    div.className = 'item-row';
+    div.innerHTML = `
+        <div class="d-flex align-items-center justify-content-between mb-2 d-md-none">
+            <span class="fw-bold">Item <span class="row-number">${idx + 1}</span></span>
             <button type="button" class="btn btn-sm btn-danger remove-row">
                 <i class="fas fa-trash"></i>
             </button>
-        </td>
+        </div>
+        <div class="row g-2 align-items-center">
+            <div class="col-12 col-md-4">
+                <label class="form-label small mb-0 d-md-none">Produk</label>
+                <select name="items[${idx}][produk_id]" class="form-control form-control-sm produk-select" required>
+                    <option value="">-- Pilih --</option>
+                    <?= $produkOpts ?>
+                </select>
+            </div>
+            <div class="col-12 col-md-3">
+                <label class="form-label small mb-0 d-md-none">Tier Harga</label>
+                <select name="items[${idx}][harga_jual_id]" class="form-control form-control-sm tier-select" required disabled>
+                    <option value="">-- Pilih Produk dulu --</option>
+                </select>
+            </div>
+            <div class="col-6 col-md-2">
+                <label class="form-label small mb-0 d-md-none">Qty</label>
+                <input type="number" name="items[${idx}][jumlah_titip]" class="form-control form-control-sm qty" min="1" required>
+            </div>
+            <div class="col-6 col-md-2">
+                <label class="form-label small mb-0 d-md-none">Tgl Expired</label>
+                <input type="date" name="items[${idx}][tgl_expired]" class="form-control form-control-sm tgl-expired" readonly>
+            </div>
+            <div class="col-4 col-md-1 text-center align-self-center">
+                <small class="d-block d-md-none text-muted">Stok</small>
+                <span class="stok-sales-display fw-bold">0</span>
+            </div>
+            <div class="col-4 col-md-1 text-center align-self-center">
+                <small class="d-block d-md-none text-muted">Harga</small>
+                <span class="harga-display fw-bold">0</span>
+            </div>
+            <?php if ($role !== 'sales'): ?>
+            <div class="col-4 col-md-1 text-center align-self-center">
+                <small class="d-block d-md-none text-muted">Fee</small>
+                <span class="fee-display fw-bold">0</span>
+            </div>
+            <?php endif; ?>
+            <div class="col-12 col-md-1 text-center align-self-center d-none d-md-block">
+                <button type="button" class="btn btn-sm btn-danger remove-row">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
     `;
-    tbody.appendChild(row);
+    container.appendChild(div);
     renumberRows();
     updateRemoveButtons();
-    attachRowEvents(row);
+    attachRowEvents(div);
 });
 
 function renumberRows() {

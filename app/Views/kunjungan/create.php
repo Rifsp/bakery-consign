@@ -7,6 +7,28 @@
         <h1 class="h3 mb-0 text-gray-800">Buat Kunjungan</h1>
     </div>
 
+    <style>
+    .penjualan-row, .retur-row {
+        background: #fff;
+        padding: .5rem .75rem;
+        margin-bottom: .5rem;
+        border: 1px solid #dee2e6;
+        border-radius: .25rem;
+    }
+    @media (min-width: 768px) {
+        .penjualan-row, .retur-row {
+            padding: .35rem 0;
+            margin-bottom: 0;
+            border: none;
+            border-bottom: 1px solid #f0f0f0;
+            border-radius: 0;
+        }
+        .penjualan-row:last-child, .retur-row:last-child {
+            border-bottom: none;
+        }
+    }
+    </style>
+
     <div class="card shadow mb-4">
         <div class="card-body">
             <form action="<?= base_url('/kunjungan/store') ?>" method="POST">
@@ -46,56 +68,59 @@
                     <small class="text-muted">(isi jika ada penjualan)</small>
                 </h5>
 
-                <div class="table-responsive mb-3">
-                    <table class="table table-bordered" id="penjualanTable">
-                        <thead>
-                            <tr>
-                                <th style="width:4%">No</th>
-                                <th style="width:22%">Produk</th>
-                                <th style="width:10%">Qty Terjual</th>
-                                <th style="width:10%">Stok Toko</th>
-                                <th style="width:14%">Harga Satuan</th>
-                                <?php if (session()->get('role') !== 'sales'): ?>
-                                <th style="width:12%">Fee</th>
-                                <th style="width:12%">HPP</th>
-                                <?php endif; ?>
-                                <th style="width:2%"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="penjualan-row">
-                                <td class="text-center row-number">1</td>
-                                <td>
-                                    <select name="penjualan_items[0][produk_id]" class="form-control produk-select" data-section="penjualan">
-                                        <option value="">-- Pilih --</option>
-                                        <?php foreach ($produkList as $p): ?>
-                                        <option value="<?= $p['id'] ?>" data-nama="<?= esc($p['nama']) ?>">
-                                            <?= esc($p['kode_produk']) ?> - <?= esc($p['nama']) ?>
-                                        </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <input type="hidden" name="penjualan_items[0][harga_satuan]" class="harga-satuan-input" value="0">
-                                    <input type="hidden" name="penjualan_items[0][fee_satuan]" class="fee-satuan-input" value="0">
-                                    <input type="hidden" name="penjualan_items[0][hpp_satuan]" class="hpp-satuan-input" value="0">
-                                    <input type="hidden" name="penjualan_items[0][harga_jual_id]" class="harga-jual-id-input" value="0">
-                                </td>
-                                <td>
-                                    <input type="number" name="penjualan_items[0][jumlah_terjual]" class="form-control qty" min="1" required>
-                                </td>
-                                <td class="stok-display text-center">0</td>
-                                <td class="harga-display text-right">0</td>
-                                <?php if (session()->get('role') !== 'sales'): ?>
-                                <td class="fee-display text-right">0</td>
-                                <td class="hpp-display text-right">0</td>
-                                <?php endif; ?>
-                                <td class="text-center">
-                                    <button type="button" class="btn btn-sm btn-danger remove-row" disabled>
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div id="penjualanContainer">
+                    <div class="penjualan-row">
+                        <div class="d-flex align-items-center justify-content-between mb-2 d-md-none">
+                            <span class="fw-bold">Item <span class="row-number">1</span></span>
+                            <button type="button" class="btn btn-sm btn-danger remove-row" disabled>
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <div class="row g-2 align-items-center">
+                            <div class="col-12 col-md-4">
+                                <label class="form-label small mb-0 d-md-none">Produk</label>
+                                <select name="penjualan_items[0][produk_id]" class="form-control form-control-sm produk-select" data-section="penjualan">
+                                    <option value="">-- Pilih --</option>
+                                    <?php foreach ($produkList as $p): ?>
+                                    <option value="<?= $p['id'] ?>" data-nama="<?= esc($p['nama']) ?>">
+                                        <?= esc($p['kode_produk']) ?> - <?= esc($p['nama']) ?>
+                                    </option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <input type="hidden" name="penjualan_items[0][harga_satuan]" class="harga-satuan-input" value="0">
+                                <input type="hidden" name="penjualan_items[0][fee_satuan]" class="fee-satuan-input" value="0">
+                                <input type="hidden" name="penjualan_items[0][hpp_satuan]" class="hpp-satuan-input" value="0">
+                                <input type="hidden" name="penjualan_items[0][harga_jual_id]" class="harga-jual-id-input" value="0">
+                            </div>
+                            <div class="col-6 col-md-2">
+                                <label class="form-label small mb-0 d-md-none">Qty Terjual</label>
+                                <input type="number" name="penjualan_items[0][jumlah_terjual]" class="form-control form-control-sm qty" min="1" required>
+                            </div>
+                            <div class="col-6 col-md-2 text-center align-self-center">
+                                <small class="d-block d-md-none text-muted">Stok Toko</small>
+                                <span class="stok-display fw-bold">0</span>
+                            </div>
+                            <div class="col-6 col-md-2 text-center align-self-center">
+                                <small class="d-block d-md-none text-muted">Harga</small>
+                                <span class="harga-display fw-bold">0</span>
+                            </div>
+                            <?php if (session()->get('role') !== 'sales'): ?>
+                            <div class="col-3 col-md-1 text-center align-self-center">
+                                <small class="d-block d-md-none text-muted">Fee</small>
+                                <span class="fee-display fw-bold">0</span>
+                            </div>
+                            <div class="col-3 col-md-1 text-center align-self-center">
+                                <small class="d-block d-md-none text-muted">HPP</small>
+                                <span class="hpp-display fw-bold">0</span>
+                            </div>
+                            <?php endif; ?>
+                            <div class="col-12 col-md-1 text-center align-self-center d-none d-md-block">
+                                <button type="button" class="btn btn-sm btn-danger remove-row" disabled>
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <button type="button" class="btn btn-sm btn-success mb-4" id="addPenjualanRow">
                     <i class="fas fa-plus"></i> Tambah Item Penjualan
@@ -107,58 +132,57 @@
                     <small class="text-muted">(isi jika ada retur)</small>
                 </h5>
 
-                <div class="table-responsive mb-3">
-                    <table class="table table-bordered" id="returTable">
-                        <thead>
-                            <tr>
-                                <th style="width:4%">No</th>
-                                <th style="width:20%">Produk</th>
-                                <th style="width:10%">Qty Retur</th>
-                                <th style="width:12%">Kondisi</th>
-                                <th style="width:12%">Tgl Expired</th>
-                                <th style="width:10%">Stok Toko</th>
-                                <th style="width:20%">Keterangan</th>
-                                <th style="width:2%"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="retur-row">
-                                <td class="text-center row-number">1</td>
-                                <td>
-                                    <select name="retur_items[0][produk_id]" class="form-control produk-select" data-section="retur">
-                                        <option value="">-- Pilih --</option>
-                                        <?php foreach ($produkList as $p): ?>
-                                        <option value="<?= $p['id'] ?>" data-nama="<?= esc($p['nama']) ?>">
-                                            <?= esc($p['kode_produk']) ?> - <?= esc($p['nama']) ?>
-                                        </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="number" name="retur_items[0][jumlah_retur]" class="form-control qty" min="1" required>
-                                </td>
-                                <td>
-                                    <select name="retur_items[0][kondisi]" class="form-control">
-                                        <option value="baik">Baik</option>
-                                        <option value="rusak">Rusak</option>
-                                        <option value="expired">Expired</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="date" name="retur_items[0][tgl_expired]" class="form-control">
-                                </td>
-                                <td class="stok-display text-center">0</td>
-                                <td>
-                                    <input type="text" name="retur_items[0][keterangan]" class="form-control" placeholder="Keterangan (opsional)">
-                                </td>
-                                <td class="text-center">
-                                    <button type="button" class="btn btn-sm btn-danger remove-row" disabled>
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div id="returContainer">
+                    <div class="retur-row">
+                        <div class="d-flex align-items-center justify-content-between mb-2 d-md-none">
+                            <span class="fw-bold">Item <span class="row-number">1</span></span>
+                            <button type="button" class="btn btn-sm btn-danger remove-row" disabled>
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <div class="row g-2 align-items-center">
+                            <div class="col-12 col-md-4">
+                                <label class="form-label small mb-0 d-md-none">Produk</label>
+                                <select name="retur_items[0][produk_id]" class="form-control form-control-sm produk-select" data-section="retur">
+                                    <option value="">-- Pilih --</option>
+                                    <?php foreach ($produkList as $p): ?>
+                                    <option value="<?= $p['id'] ?>" data-nama="<?= esc($p['nama']) ?>">
+                                        <?= esc($p['kode_produk']) ?> - <?= esc($p['nama']) ?>
+                                    </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="col-6 col-md-2">
+                                <label class="form-label small mb-0 d-md-none">Qty Retur</label>
+                                <input type="number" name="retur_items[0][jumlah_retur]" class="form-control form-control-sm qty" min="1" required>
+                            </div>
+                            <div class="col-6 col-md-2">
+                                <label class="form-label small mb-0 d-md-none">Kondisi</label>
+                                <select name="retur_items[0][kondisi]" class="form-control form-control-sm">
+                                    <option value="baik">Baik</option>
+                                    <option value="rusak">Rusak</option>
+                                    <option value="expired">Expired</option>
+                                </select>
+                            </div>
+                            <div class="col-6 col-md-2">
+                                <label class="form-label small mb-0 d-md-none">Tgl Expired</label>
+                                <input type="date" name="retur_items[0][tgl_expired]" class="form-control form-control-sm">
+                            </div>
+                            <div class="col-6 col-md-1 text-center align-self-center">
+                                <small class="d-block d-md-none text-muted">Stok</small>
+                                <span class="stok-display fw-bold">0</span>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label small mb-0 d-md-none">Keterangan</label>
+                                <input type="text" name="retur_items[0][keterangan]" class="form-control form-control-sm" placeholder="Ket (opsional)">
+                            </div>
+                            <div class="col-12 col-md-1 text-center align-self-center d-none d-md-block">
+                                <button type="button" class="btn btn-sm btn-danger remove-row" disabled>
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <button type="button" class="btn btn-sm btn-success mb-4" id="addReturRow">
                     <i class="fas fa-plus"></i> Tambah Item Retur
@@ -264,8 +288,8 @@ function attachReturEvents(row) {
     });
 }
 
-function updateRemoveButtons(tableId) {
-    const rows = document.querySelectorAll('#' + tableId + ' tbody tr');
+function updateRemoveButtons(containerId) {
+    const rows = document.querySelectorAll('#' + containerId + ' .penjualan-row, #' + containerId + ' .retur-row');
     rows.forEach((row, i) => {
         const btn = row.querySelector('.remove-row');
         if (btn) btn.disabled = rows.length === 1;
@@ -273,94 +297,138 @@ function updateRemoveButtons(tableId) {
 }
 
 function addPenjualanRow() {
-    const tbody = document.querySelector('#penjualanTable tbody');
+    const container = document.querySelector('#penjualanContainer');
     const idx = getNextIndex('penjualan');
-    const row = document.createElement('tr');
-    row.className = 'penjualan-row';
     <?php $role = session()->get('role'); ?>
-    row.innerHTML = `
-        <td class="text-center row-number">${idx + 1}</td>
-        <td>
-            <select name="penjualan_items[${idx}][produk_id]" class="form-control produk-select" data-section="penjualan">
-                <option value="">-- Pilih --</option>
-                <?php foreach ($produkList as $p): ?>
-                <option value="<?= $p['id'] ?>" data-nama="<?= esc($p['nama']) ?>">
-                    <?= esc($p['kode_produk']) ?> - <?= esc($p['nama']) ?>
-                </option>
-                <?php endforeach; ?>
-            </select>
-            <input type="hidden" name="penjualan_items[${idx}][harga_satuan]" class="harga-satuan-input" value="0">
-            <input type="hidden" name="penjualan_items[${idx}][fee_satuan]" class="fee-satuan-input" value="0">
-            <input type="hidden" name="penjualan_items[${idx}][hpp_satuan]" class="hpp-satuan-input" value="0">
-            <input type="hidden" name="penjualan_items[${idx}][harga_jual_id]" class="harga-jual-id-input" value="0">
-        </td>
-        <td><input type="number" name="penjualan_items[${idx}][jumlah_terjual]" class="form-control qty" min="1" required></td>
-        <td class="stok-display text-center">0</td>
-        <td class="harga-display text-right">0</td>
-        <?php if ($role !== 'sales'): ?>
-        <td class="fee-display text-right">0</td>
-        <td class="hpp-display text-right">0</td>
-        <?php endif; ?>
-        <td class="text-center">
+    const div = document.createElement('div');
+    div.className = 'penjualan-row';
+    div.innerHTML = `
+        <div class="d-flex align-items-center justify-content-between mb-2 d-md-none">
+            <span class="fw-bold">Item <span class="row-number">${idx + 1}</span></span>
             <button type="button" class="btn btn-sm btn-danger remove-row">
                 <i class="fas fa-trash"></i>
             </button>
-        </td>
+        </div>
+        <div class="row g-2 align-items-center">
+            <div class="col-12 col-md-4">
+                <label class="form-label small mb-0 d-md-none">Produk</label>
+                <select name="penjualan_items[${idx}][produk_id]" class="form-control form-control-sm produk-select" data-section="penjualan">
+                    <option value="">-- Pilih --</option>
+                    <?php foreach ($produkList as $p): ?>
+                    <option value="<?= $p['id'] ?>" data-nama="<?= esc($p['nama']) ?>">
+                        <?= esc($p['kode_produk']) ?> - <?= esc($p['nama']) ?>
+                    </option>
+                    <?php endforeach; ?>
+                </select>
+                <input type="hidden" name="penjualan_items[${idx}][harga_satuan]" class="harga-satuan-input" value="0">
+                <input type="hidden" name="penjualan_items[${idx}][fee_satuan]" class="fee-satuan-input" value="0">
+                <input type="hidden" name="penjualan_items[${idx}][hpp_satuan]" class="hpp-satuan-input" value="0">
+                <input type="hidden" name="penjualan_items[${idx}][harga_jual_id]" class="harga-jual-id-input" value="0">
+            </div>
+            <div class="col-6 col-md-2">
+                <label class="form-label small mb-0 d-md-none">Qty Terjual</label>
+                <input type="number" name="penjualan_items[${idx}][jumlah_terjual]" class="form-control form-control-sm qty" min="1" required>
+            </div>
+            <div class="col-6 col-md-2 text-center align-self-center">
+                <small class="d-block d-md-none text-muted">Stok Toko</small>
+                <span class="stok-display fw-bold">0</span>
+            </div>
+            <div class="col-6 col-md-2 text-center align-self-center">
+                <small class="d-block d-md-none text-muted">Harga</small>
+                <span class="harga-display fw-bold">0</span>
+            </div>
+            <?php if ($role !== 'sales'): ?>
+            <div class="col-3 col-md-1 text-center align-self-center">
+                <small class="d-block d-md-none text-muted">Fee</small>
+                <span class="fee-display fw-bold">0</span>
+            </div>
+            <div class="col-3 col-md-1 text-center align-self-center">
+                <small class="d-block d-md-none text-muted">HPP</small>
+                <span class="hpp-display fw-bold">0</span>
+            </div>
+            <?php endif; ?>
+            <div class="col-12 col-md-1 text-center align-self-center d-none d-md-block">
+                <button type="button" class="btn btn-sm btn-danger remove-row">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
     `;
-    tbody.appendChild(row);
-    updateRemoveButtons('penjualanTable');
-    attachPenjualanEvents(row);
+    container.appendChild(div);
+    updateRemoveButtons('penjualanContainer');
+    attachPenjualanEvents(div);
 }
 
 function addReturRow() {
-    const tbody = document.querySelector('#returTable tbody');
+    const container = document.querySelector('#returContainer');
     const idx = getNextIndex('retur');
-    const row = document.createElement('tr');
-    row.className = 'retur-row';
-    row.innerHTML = `
-        <td class="text-center row-number">${idx + 1}</td>
-        <td>
-            <select name="retur_items[${idx}][produk_id]" class="form-control produk-select" data-section="retur">
-                <option value="">-- Pilih --</option>
-                <?php foreach ($produkList as $p): ?>
-                <option value="<?= $p['id'] ?>" data-nama="<?= esc($p['nama']) ?>">
-                    <?= esc($p['kode_produk']) ?> - <?= esc($p['nama']) ?>
-                </option>
-                <?php endforeach; ?>
-            </select>
-        </td>
-        <td><input type="number" name="retur_items[${idx}][jumlah_retur]" class="form-control qty" min="1" required></td>
-        <td>
-            <select name="retur_items[${idx}][kondisi]" class="form-control">
-                <option value="baik">Baik</option>
-                <option value="rusak">Rusak</option>
-                <option value="expired">Expired</option>
-            </select>
-        </td>
-        <td><input type="date" name="retur_items[${idx}][tgl_expired]" class="form-control"></td>
-        <td class="stok-display text-center">0</td>
-        <td><input type="text" name="retur_items[${idx}][keterangan]" class="form-control" placeholder="Keterangan (opsional)"></td>
-        <td class="text-center">
+    const div = document.createElement('div');
+    div.className = 'retur-row';
+    div.innerHTML = `
+        <div class="d-flex align-items-center justify-content-between mb-2 d-md-none">
+            <span class="fw-bold">Item <span class="row-number">${idx + 1}</span></span>
             <button type="button" class="btn btn-sm btn-danger remove-row">
                 <i class="fas fa-trash"></i>
             </button>
-        </td>
+        </div>
+        <div class="row g-2 align-items-center">
+            <div class="col-12 col-md-4">
+                <label class="form-label small mb-0 d-md-none">Produk</label>
+                <select name="retur_items[${idx}][produk_id]" class="form-control form-control-sm produk-select" data-section="retur">
+                    <option value="">-- Pilih --</option>
+                    <?php foreach ($produkList as $p): ?>
+                    <option value="<?= $p['id'] ?>" data-nama="<?= esc($p['nama']) ?>">
+                        <?= esc($p['kode_produk']) ?> - <?= esc($p['nama']) ?>
+                    </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="col-6 col-md-2">
+                <label class="form-label small mb-0 d-md-none">Qty Retur</label>
+                <input type="number" name="retur_items[${idx}][jumlah_retur]" class="form-control form-control-sm qty" min="1" required>
+            </div>
+            <div class="col-6 col-md-2">
+                <label class="form-label small mb-0 d-md-none">Kondisi</label>
+                <select name="retur_items[${idx}][kondisi]" class="form-control form-control-sm">
+                    <option value="baik">Baik</option>
+                    <option value="rusak">Rusak</option>
+                    <option value="expired">Expired</option>
+                </select>
+            </div>
+            <div class="col-6 col-md-2">
+                <label class="form-label small mb-0 d-md-none">Tgl Expired</label>
+                <input type="date" name="retur_items[${idx}][tgl_expired]" class="form-control form-control-sm">
+            </div>
+            <div class="col-6 col-md-1 text-center align-self-center">
+                <small class="d-block d-md-none text-muted">Stok</small>
+                <span class="stok-display fw-bold">0</span>
+            </div>
+            <div class="col-12 col-md-3">
+                <label class="form-label small mb-0 d-md-none">Keterangan</label>
+                <input type="text" name="retur_items[${idx}][keterangan]" class="form-control form-control-sm" placeholder="Ket (opsional)">
+            </div>
+            <div class="col-12 col-md-1 text-center align-self-center d-none d-md-block">
+                <button type="button" class="btn btn-sm btn-danger remove-row">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
     `;
-    tbody.appendChild(row);
-    updateRemoveButtons('returTable');
-    attachReturEvents(row);
+    container.appendChild(div);
+    updateRemoveButtons('returContainer');
+    attachReturEvents(div);
 }
 
-document.querySelectorAll('#penjualanTable .penjualan-row').forEach(row => {
+document.querySelectorAll('#penjualanContainer .penjualan-row').forEach(row => {
     attachPenjualanEvents(row);
     row.querySelector('.row-number').textContent = '1';
 });
-document.querySelectorAll('#returTable .retur-row').forEach(row => {
+document.querySelectorAll('#returContainer .retur-row').forEach(row => {
     attachReturEvents(row);
     row.querySelector('.row-number').textContent = '1';
 });
-updateRemoveButtons('penjualanTable');
-updateRemoveButtons('returTable');
+updateRemoveButtons('penjualanContainer');
+updateRemoveButtons('returContainer');
 
 document.getElementById('addPenjualanRow').addEventListener('click', addPenjualanRow);
 document.getElementById('addReturRow').addEventListener('click', addReturRow);
@@ -368,13 +436,13 @@ document.getElementById('addReturRow').addEventListener('click', addReturRow);
 document.getElementById('toko_id').addEventListener('change', function() {
     stokCache = {};
     hargaCache = {};
-    document.querySelectorAll('#penjualanTable .penjualan-row').forEach(row => {
+    document.querySelectorAll('#penjualanContainer .penjualan-row').forEach(row => {
         const produkSelect = row.querySelector('.produk-select');
         if (produkSelect.value) {
             produkSelect.dispatchEvent(new Event('change'));
         }
     });
-    document.querySelectorAll('#returTable .retur-row').forEach(row => {
+    document.querySelectorAll('#returContainer .retur-row').forEach(row => {
         const produkSelect = row.querySelector('.produk-select');
         if (produkSelect.value) {
             produkSelect.dispatchEvent(new Event('change'));
@@ -386,19 +454,18 @@ document.addEventListener('click', function(e) {
     if (e.target.closest('.remove-row')) {
         const btn = e.target.closest('.remove-row');
         if (!btn.disabled) {
-            const row = btn.closest('tr');
-            const table = row.closest('table');
-            const tbody = table.querySelector('tbody');
-            const rows = tbody.querySelectorAll('tr');
+            const row = btn.closest('.penjualan-row, .retur-row');
+            const container = row.parentNode;
+            const rows = container.querySelectorAll('.penjualan-row, .retur-row');
             if (rows.length > 1) {
                 row.remove();
-                const rows2 = tbody.querySelectorAll('tr');
+                const rows2 = container.querySelectorAll('.penjualan-row, .retur-row');
                 rows2.forEach((r, i) => {
                     const num = r.querySelector('.row-number');
                     if (num) num.textContent = i + 1;
                 });
-                if (table.id === 'penjualanTable') updateRemoveButtons('penjualanTable');
-                if (table.id === 'returTable') updateRemoveButtons('returTable');
+                if (row.classList.contains('penjualan-row')) updateRemoveButtons('penjualanContainer');
+                if (row.classList.contains('retur-row')) updateRemoveButtons('returContainer');
             }
         }
     }

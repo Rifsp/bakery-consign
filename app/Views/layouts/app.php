@@ -71,7 +71,7 @@ $flashInfo    = session()->getFlashdata('info');
                         </a>
                         <a class="nav-link" href="<?= base_url('pengiriman') ?>">
                             <div class="sb-nav-link-icon"><i class="fas fa-dolly"></i></div>
-                            Pengiriman
+                            Transfer Sales
                         </a>
                         <?php endif; ?>
                         <a class="nav-link" href="<?= base_url('kunjungan') ?>">
