@@ -2,11 +2,14 @@
 
 namespace Config;
 
-use CodeIgniter\Config\BaseConfig;
+use CodeIgniter\Config\Filters as BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
+use CodeIgniter\Filters\ForceHTTPS;
 use CodeIgniter\Filters\Honeypot;
 use CodeIgniter\Filters\InvalidChars;
+use CodeIgniter\Filters\PageCache;
+use CodeIgniter\Filters\PerformanceMetrics;
 use CodeIgniter\Filters\SecureHeaders;
 
 class Filters extends BaseConfig
@@ -24,6 +27,9 @@ class Filters extends BaseConfig
         'honeypot'      => Honeypot::class,
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
+        'forcehttps'    => ForceHTTPS::class,
+        'pagecache'     => PageCache::class,
+        'performance'   => PerformanceMetrics::class,
     ];
 
     /**
@@ -39,7 +45,6 @@ class Filters extends BaseConfig
             // 'invalidchars',
         ],
         'after' => [
-            'toolbar',
             // 'honeypot',
             // 'secureheaders',
         ],
@@ -70,4 +75,21 @@ class Filters extends BaseConfig
      * @var array<string, array<string, list<string>>>
      */
     public array $filters = [];
+
+    /**
+     * List of filter aliases that are required for the app.
+     *
+     * @var array<string, list<string>>
+     */
+    public array $required = [
+        'before' => [
+            'forcehttps',
+            'pagecache',
+        ],
+        'after' => [
+            'pagecache',
+            'performance',
+            'toolbar',
+        ],
+    ];
 }
