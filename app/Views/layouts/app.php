@@ -186,6 +186,7 @@ $flashInfo    = session()->getFlashdata('info');
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" crossorigin="anonymous"></script>
     <script src="<?= base_url('js/custom.js') ?>"></script>
+     <script src=""></script>
     <?= $this->renderSection('scripts') ?>
 </body>
 </html>
