@@ -32,7 +32,7 @@ class Database extends Config
         'username'     => 'postgres',
         'password'     => 'qwe74123',
         'database'     => 'db_bakery',
-        'DBDriver'     => 'postgre',
+        'DBDriver'     => 'Postgre',
         'DBPrefix'     => '',
         'pConnect'     => false,
         'DBDebug'      => true,
