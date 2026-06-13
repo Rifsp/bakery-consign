@@ -206,7 +206,7 @@ class Laporan extends BaseController
         }
 
         $isSales = $role === 'sales';
-        $jenis = $isSales ? 'sales' : $this->request->getGet('jenis') ?: 'gudang';
+        $jenis = $isSales ? 'sales' : ($this->request->getGet('jenis') ?: 'gudang');
         $tglDari = $this->request->getGet('tgl_dari') ?: date('Y-m-01');
         $tglSampai = $this->request->getGet('tgl_sampai') ?: date('Y-m-t');
         $salesId = $isSales ? (int) session()->get('id') : ($this->request->getGet('sales_id') ? (int) $this->request->getGet('sales_id') : null);
@@ -239,7 +239,7 @@ class Laporan extends BaseController
         }
 
         $isSales = $role === 'sales';
-        $jenis = $isSales ? 'sales' : $this->request->getGet('jenis') ?: 'gudang';
+        $jenis = $isSales ? 'sales' : ($this->request->getGet('jenis') ?: 'gudang');
         $produkId = (int) $this->request->getGet('produk_id');
         $tglDari = $this->request->getGet('tgl_dari') ?: date('Y-m-01');
         $tglSampai = $this->request->getGet('tgl_sampai') ?: date('Y-m-t');
