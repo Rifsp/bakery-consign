@@ -8,6 +8,8 @@ use App\Models\StokTokoModel;
 use App\Models\StokSalesModel;
 use App\Models\MutasiSalesModel;
 use App\Models\StokExpiredTokoModel;
+use App\Models\StokGudangModel;
+use App\Models\MutasiGudangModel;
 
 class Retur extends BaseController
 {
@@ -193,6 +195,8 @@ class Retur extends BaseController
         $stokSalesModel = new StokSalesModel();
         $mutasiSalesModel = new MutasiSalesModel();
         $stokExpiredModel = new StokExpiredTokoModel();
+        $stokGudangModel = new StokGudangModel();
+        $mutasiGudangModel = new MutasiGudangModel();
 
         $db = \Config\Database::connect();
         $db->transStart();
@@ -220,6 +224,18 @@ class Retur extends BaseController
                     'referensi_id' => $id,
                     'referensi_tabel' => 'retur',
                     'keterangan' => 'Retur baik: ' . $header['nomor_retur'],
+                ]);
+            } else {
+                $stokGudangModel->tambahStok($produkId, $jumlahRetur);
+
+                $mutasiGudangModel->insert([
+                    'produk_id' => $produkId,
+                    'jenis' => 'retur_masuk',
+                    'jumlah' => $jumlahRetur,
+                    'referensi_id' => $id,
+                    'referensi_tabel' => 'retur',
+                    'keterangan' => 'Retur ' . $kondisi . ': ' . $header['nomor_retur'],
+                    'dibuat_oleh' => session()->get('user_id'),
                 ]);
             }
 

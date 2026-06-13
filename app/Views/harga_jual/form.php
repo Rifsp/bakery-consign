@@ -12,6 +12,16 @@
             <form action="<?= base_url($config->route . ($record ? '/update' : '/store') . ($record ? '/' . $record['id'] : '')) ?>" method="POST">
                 <?= csrf_field() ?>
 
+                <?php if (session()->getFlashdata('errors')): ?>
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            <?php foreach (session()->getFlashdata('errors') as $error): ?>
+                                <li><?= esc($error) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+
                 <input type="hidden" name="produk_id" value="<?= old('produk_id', $record['produk_id'] ?? $produk['id']) ?>">
 
                 <div class="form-group">

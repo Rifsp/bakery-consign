@@ -63,12 +63,13 @@ class User extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $email = $this->request->getPost('email');
         $this->userModel->insert([
             'username' => $this->request->getPost('username'),
             'nama' => $this->request->getPost('nama'),
             'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
             'role' => $this->request->getPost('role'),
-            'email' => $this->request->getPost('email'),
+            'email' => $email !== '' ? $email : null,
             'telepon' => $this->request->getPost('telepon'),
             'is_aktif' => (bool) $this->request->getPost('is_aktif'),
         ]);
@@ -107,11 +108,12 @@ class User extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $email = $this->request->getPost('email');
         $data = [
             'username' => $this->request->getPost('username'),
             'nama' => $this->request->getPost('nama'),
             'role' => $this->request->getPost('role'),
-            'email' => $this->request->getPost('email'),
+            'email' => $email !== '' ? $email : null,
             'telepon' => $this->request->getPost('telepon'),
             'is_aktif' => (bool) $this->request->getPost('is_aktif'),
         ];

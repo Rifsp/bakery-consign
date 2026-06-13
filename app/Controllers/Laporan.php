@@ -198,6 +198,66 @@ class Laporan extends BaseController
         return view('laporan/stok_toko_saya', $data);
     }
 
+    public function mutasi()
+    {
+        $role = session()->get('role');
+        if ($role !== 'admin' && $role !== 'sales') {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $isSales = $role === 'sales';
+        $jenis = $isSales ? 'sales' : $this->request->getGet('jenis') ?: 'gudang';
+        $tglDari = $this->request->getGet('tgl_dari') ?: date('Y-m-01');
+        $tglSampai = $this->request->getGet('tgl_sampai') ?: date('Y-m-t');
+        $salesId = $isSales ? (int) session()->get('id') : ($this->request->getGet('sales_id') ? (int) $this->request->getGet('sales_id') : null);
+
+        if ($jenis === 'sales') {
+            $records = $this->laporanModel->mutasiSalesRingkasan($tglDari, $tglSampai, $salesId);
+        } else {
+            $jenis = 'gudang';
+            $records = $this->laporanModel->mutasiGudangRingkasan($tglDari, $tglSampai);
+        }
+
+        $data = [
+            'title' => 'Mutasi Stok',
+            'records' => $records,
+            'jenis' => $jenis,
+            'tglDari' => $tglDari,
+            'tglSampai' => $tglSampai,
+            'salesList' => (new UserModel())->where('role', 'sales')->findAll(),
+            'filterSales' => $salesId,
+            'isSales' => $isSales,
+        ];
+        return view('laporan/mutasi', $data);
+    }
+
+    public function mutasiDetailJson()
+    {
+        $role = session()->get('role');
+        if ($role !== 'admin' && $role !== 'sales') {
+            return $this->response->setJSON([]);
+        }
+
+        $isSales = $role === 'sales';
+        $jenis = $isSales ? 'sales' : $this->request->getGet('jenis') ?: 'gudang';
+        $produkId = (int) $this->request->getGet('produk_id');
+        $tglDari = $this->request->getGet('tgl_dari') ?: date('Y-m-01');
+        $tglSampai = $this->request->getGet('tgl_sampai') ?: date('Y-m-t');
+        $salesId = $isSales ? (int) session()->get('id') : ($this->request->getGet('sales_id') ? (int) $this->request->getGet('sales_id') : null);
+
+        if (!$produkId) {
+            return $this->response->setJSON([]);
+        }
+
+        if ($jenis === 'sales') {
+            $records = $this->laporanModel->mutasiSalesDetail($produkId, $tglDari, $tglSampai, $salesId);
+        } else {
+            $records = $this->laporanModel->mutasiGudangDetail($produkId, $tglDari, $tglSampai);
+        }
+
+        return $this->response->setJSON($records);
+    }
+
     public function stokTokoDetail($tokoId)
     {
         $role = session()->get('role');

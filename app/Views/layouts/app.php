@@ -15,7 +15,22 @@ $flashInfo    = session()->getFlashdata('info');
     <title><?= ($title ?? '') ? $title . ' — DIANTRA BAKERY' : 'DIANTRA BAKERY' ?></title>
     <link href="<?= base_url('templates/sb-admin/dist/css/styles.css') ?>" rel="stylesheet" />
     <link href="<?= base_url('css/custom.css') ?>" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <style>
+    .select2-container--default .select2-selection--single {
+        height: calc(2.25rem + 2px);
+        padding: .375rem .75rem;
+        border: 1px solid #ced4da;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 1.5;
+        padding-left: 0;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: calc(2.25rem + 2px);
+    }
+    </style>
 </head>
 <body class="sb-nav-fixed">
     <div id="pageLoader" class="page-loader"><div class="bakery-spinner"></div></div>
@@ -138,6 +153,10 @@ $flashInfo    = session()->getFlashdata('info');
                             Stok Toko Saya
                         </a>
                         <?php endif; ?>
+                        <a class="nav-link" href="<?= base_url('/laporan/mutasi') ?>">
+                            <div class="sb-nav-link-icon"><i class="fas fa-exchange-alt"></i></div>
+                            Mutasi Stok
+                        </a>
 
                         <div class="sb-sidenav-menu-heading">Pengaturan</div>
                         <?php if ($role === 'admin'): ?>
@@ -182,6 +201,7 @@ $flashInfo    = session()->getFlashdata('info');
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="<?= base_url('templates/sb-admin/dist/js/scripts.js') ?>"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" crossorigin="anonymous"></script>

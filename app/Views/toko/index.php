@@ -36,16 +36,16 @@
                             <td><?= esc($record['pemilik']) ?></td>
                             <td><?= esc($record['kota']) ?></td>
                             <td><?= esc($record['telepon']) ?></td>
-                            <td><?= esc($record['sales_id']) ?></td>
-                            <td><?= $record['is_aktif'] ? '<span class="badge badge-success">Aktif</span>' : '<span class="badge badge-secondary">Nonaktif</span>' ?></td>
+                            <td><?= esc($salesList[$record['sales_id']] ?? '-') ?></td>
+                            <td><?= $record['is_aktif'] ? '<span class="badge badge-success">Aktif</span>' : '<span class="badge badge-danger">Nonaktif</span>' ?></td>
                             <td>
                                 <a href="<?= base_url($config->route . '/edit/' . $record['id']) ?>" class="btn btn-sm btn-primary">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <form action="<?= base_url($config->route . '/delete/' . $record['id']) ?>" method="POST" style="display:inline">
                                     <?= csrf_field() ?>
-                                    <button type="submit" class="btn btn-sm btn-danger btn-delete-confirm" data-confirm="Yakin hapus data ini?">
-                                        <i class="fas fa-trash"></i>
+                                    <button type="submit" class="btn btn-sm btn-<?= $record['is_aktif'] ? 'danger' : 'success' ?> btn-delete-confirm" data-confirm="<?= $record['is_aktif'] ? 'Nonaktifkan' : 'Aktifkan' ?> toko ini?">
+                                        <i class="fas fa-<?= $record['is_aktif'] ? 'ban' : 'check' ?>"></i>
                                     </button>
                                 </form>
                             </td>

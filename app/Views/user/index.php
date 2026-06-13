@@ -51,7 +51,7 @@
                             <td><?= esc($r['email'] ?? '-') ?></td>
                             <td><?= esc($r['telepon'] ?? '-') ?></td>
                             <td>
-                                <span class="badge bg-<?= $r['is_aktif'] ? 'success' : 'secondary' ?>">
+                                <span class="badge bg-<?= $r['is_aktif'] ? 'success' : 'danger' ?>">
                                     <?= $r['is_aktif'] ? 'Aktif' : 'Nonaktif' ?>
                                 </span>
                             </td>

@@ -14,7 +14,7 @@
 
                 <div class="form-group">
                     <label for="kode_produk">Kode</label>
-                    <input type="text" class="form-control" id="kode_produk" name="kode_produk" value="<?= old('kode_produk', $record['kode_produk'] ?? '') ?>" placeholder="" >
+                    <input type="text" class="form-control" id="kode_produk" name="kode_produk" value="<?= old('kode_produk', $record['kode_produk'] ?? '') ?>" readonly>
                 </div>
 
                 <div class="form-group">
@@ -24,7 +24,7 @@
 
                 <div class="form-group">
                     <label for="kategori_id">Kategori</label>
-                    <select class="form-control" id="kategori_id" name="kategori_id" >
+                    <select class="form-control select2" id="kategori_id" name="kategori_id" >
                         <option value="">-- Pilih --</option>
                         <?php $kategoris = (new \App\Models\KategoriProdukModel())->findAll(); ?>
                         <?php foreach ($kategoris as $k): ?>
@@ -37,7 +37,7 @@
 
                 <div class="form-group">
                     <label for="satuan">Satuan</label>
-                    <select class="form-control" id="satuan" name="satuan" >
+                    <select class="form-control select2" id="satuan" name="satuan" >
                         <option value="">-- Pilih --</option>
                         <?php $satuans = ['pcs' => 'Pcs', 'pack' => 'Pack', 'kg' => 'Kg', 'gram' => 'Gram', 'lusin' => 'Lusin', 'box' => 'Box']; ?>
                         <?php foreach ($satuans as $val => $lbl): ?>

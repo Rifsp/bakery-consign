@@ -10,6 +10,7 @@ class BaseCrudModel extends Model
     protected TableConfig $tableConfig;
     protected array $searchable = [];
     protected array $filterable = [];
+    protected $afterFind = ['convertPgBooleans'];
 
     public function setTableConfig(TableConfig $config): self
     {
@@ -112,6 +113,74 @@ class BaseCrudModel extends Model
             }
         }
         return [];
+    }
+
+    protected function convertPgBooleans(array $data): array
+    {
+        if (!isset($data['data']) || $data['data'] === null) {
+            return $data;
+        }
+
+        if (!isset($this->tableConfig)) {
+            return $data;
+        }
+
+        $booleanFields = [];
+        foreach ($this->tableConfig->fields as $field) {
+            if ($field->type === 'boolean') {
+                $booleanFields[] = $field->name;
+            }
+        }
+
+        if (empty($booleanFields)) {
+            return $data;
+        }
+
+        $rows = $data['data'];
+        $isAssoc = is_array($rows) && count(array_filter(array_keys($rows), 'is_string')) > 0;
+
+        if ($isAssoc) {
+            $rows = [$rows];
+        }
+
+        foreach ($rows as &$row) {
+            if (!is_array($row)) {
+                continue;
+            }
+            foreach ($booleanFields as $field) {
+                if (isset($row[$field])) {
+                    $row[$field] = $row[$field] === 't' || $row[$field] === true || $row[$field] === 1;
+                }
+            }
+        }
+
+        $data['data'] = $isAssoc ? $rows[0] : $rows;
+
+        return $data;
+    }
+
+    public function getNotNullColumns(): array
+    {
+        $db = \Config\Database::connect();
+
+        $exclude = [$this->tableConfig->pk ?? 'id', 'created_at', 'updated_at', 'deleted_at'];
+        if ($this->tableConfig->autoCode) {
+            $exclude[] = $this->tableConfig->autoCode;
+        }
+
+        $placeholders = implode(',', array_fill(0, count($exclude), '?'));
+
+        $sql = "SELECT column_name FROM information_schema.columns
+                WHERE table_name = ?
+                AND table_schema = 'public'
+                AND is_nullable = 'NO'
+                AND column_default IS NULL
+                AND column_name NOT IN ($placeholders)";
+
+        $params = array_merge([$this->tableConfig->name], $exclude);
+
+        $query = $db->query($sql, $params);
+        return array_column($query->getResultArray(), 'column_name');
     }
 
     public function generateAutoCode(): string

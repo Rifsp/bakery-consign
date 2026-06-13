@@ -16,4 +16,18 @@ class Produk extends BaseCrudController
         $this->viewPath = 'produk';
         $this->baseRoute = '/produk';
     }
+
+    public function delete($id)
+    {
+        $this->checkAccess();
+
+        $record = $this->model->find($id);
+        if (!$record) {
+            return redirect()->to($this->baseRoute)->with('error', $this->tableConfig->title . ' tidak ditemukan');
+        }
+
+        $this->model->update($id, ['is_aktif' => !$record['is_aktif']]);
+        $status = $record['is_aktif'] ? 'dinonaktifkan' : 'diaktifkan';
+        return redirect()->to($this->baseRoute)->with('success', $this->tableConfig->title . ' berhasil ' . $status);
+    }
 }

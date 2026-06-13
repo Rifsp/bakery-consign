@@ -181,4 +181,112 @@ class LaporanModel extends Model
         if ($tglSampai) { $sql .= " AND v.tanggal <= ?"; $params[] = $tglSampai; }
         return $this->db->query($sql, $params)->getRowArray();
     }
+
+    // --- MUTASI STOK ---
+
+    // --- MUTASI GUDANG ---
+
+    public function mutasiGudangRingkasan(?string $tglDari = null, ?string $tglSampai = null): array
+    {
+        $sql = "WITH mutasi_periode AS (
+                    SELECT produk_id,
+                        COALESCE(SUM(CASE WHEN jenis IN ('masuk','retur_masuk') THEN jumlah ELSE 0 END), 0) as total_masuk,
+                        COALESCE(SUM(CASE WHEN jenis IN ('keluar','retur_keluar','kirim_ke_sales','retur_dari_sales','penyesuaian') THEN jumlah ELSE 0 END), 0) as total_keluar
+                    FROM mutasi_gudang
+                    WHERE created_at::date >= ? AND created_at::date <= ?
+                    GROUP BY produk_id
+                ),
+                saldo_sebelum AS (
+                    SELECT produk_id,
+                        COALESCE(SUM(CASE WHEN jenis IN ('masuk','retur_masuk') THEN jumlah ELSE 0 END), 0) -
+                        COALESCE(SUM(CASE WHEN jenis IN ('keluar','retur_keluar','kirim_ke_sales','retur_dari_sales','penyesuaian') THEN jumlah ELSE 0 END), 0) as saldo_awal
+                    FROM mutasi_gudang
+                    WHERE created_at::date < ?
+                    GROUP BY produk_id
+                )
+                SELECT p.id as produk_id, p.kode_produk, p.nama as nama_produk, p.satuan,
+                    COALESCE(sb.saldo_awal, 0) as saldo_awal,
+                    COALESCE(mp.total_masuk, 0) as total_masuk,
+                    COALESCE(mp.total_keluar, 0) as total_keluar,
+                    COALESCE(sb.saldo_awal, 0) + COALESCE(mp.total_masuk, 0) - COALESCE(mp.total_keluar, 0) as saldo_akhir
+                FROM produk p
+                JOIN mutasi_periode mp ON mp.produk_id = p.id
+                LEFT JOIN saldo_sebelum sb ON sb.produk_id = p.id
+                ORDER BY p.nama";
+        return $this->db->query($sql, [$tglDari, $tglSampai, $tglDari])->getResultArray();
+    }
+
+    public function mutasiGudangDetail(int $produkId, ?string $tglDari = null, ?string $tglSampai = null): array
+    {
+        $sql = "SELECT mg.*, p.nama as nama_produk, p.kode_produk, p.satuan, u.nama as dibuat_oleh_nama
+                FROM mutasi_gudang mg
+                JOIN produk p ON p.id = mg.produk_id
+                LEFT JOIN users u ON u.id = mg.dibuat_oleh
+                WHERE mg.produk_id = ? AND mg.created_at::date >= ? AND mg.created_at::date <= ?
+                ORDER BY mg.created_at ASC";
+        return $this->db->query($sql, [$produkId, $tglDari, $tglSampai])->getResultArray();
+    }
+
+    // --- MUTASI SALES ---
+
+    public function mutasiSalesRingkasan(?string $tglDari = null, ?string $tglSampai = null, ?int $salesId = null): array
+    {
+        $params = [$tglDari, $tglSampai];
+        if ($salesId) {
+            $params[] = $salesId;
+        }
+        $params[] = $tglDari;
+        if ($salesId) {
+            $params[] = $salesId;
+        }
+        $salesFilter = $salesId ? ' AND sales_id = ?' : '';
+
+        $sql = "WITH mutasi_periode AS (
+                    SELECT produk_id,
+                        COALESCE(SUM(CASE WHEN jenis IN ('masuk_dari_gudang','retur_dari_toko') THEN jumlah ELSE 0 END), 0) as total_masuk,
+                        COALESCE(SUM(CASE WHEN jenis IN ('keluar_ke_toko','penyesuaian') THEN jumlah ELSE 0 END), 0) as total_keluar
+                    FROM mutasi_sales
+                    WHERE created_at::date >= ? AND created_at::date <= ? $salesFilter
+                    GROUP BY produk_id
+                ),
+                saldo_sebelum AS (
+                    SELECT produk_id,
+                        COALESCE(SUM(CASE WHEN jenis IN ('masuk_dari_gudang','retur_dari_toko') THEN jumlah ELSE 0 END), 0) -
+                        COALESCE(SUM(CASE WHEN jenis IN ('keluar_ke_toko','penyesuaian') THEN jumlah ELSE 0 END), 0) as saldo_awal
+                    FROM mutasi_sales
+                    WHERE created_at::date < ? $salesFilter
+                    GROUP BY produk_id
+                )
+                SELECT p.id as produk_id, p.kode_produk, p.nama as nama_produk, p.satuan,
+                    COALESCE(sb.saldo_awal, 0) as saldo_awal,
+                    COALESCE(mp.total_masuk, 0) as total_masuk,
+                    COALESCE(mp.total_keluar, 0) as total_keluar,
+                    COALESCE(sb.saldo_awal, 0) + COALESCE(mp.total_masuk, 0) - COALESCE(mp.total_keluar, 0) as saldo_akhir
+                FROM produk p
+                JOIN mutasi_periode mp ON mp.produk_id = p.id
+                LEFT JOIN saldo_sebelum sb ON sb.produk_id = p.id
+                ORDER BY p.nama";
+        $result = $this->db->query($sql, $params);
+        if ($result === false) {
+            $err = $this->db->error();
+            throw new \RuntimeException('Query error: ' . $err['message'] . ' | SQL: ' . $sql);
+        }
+        return $result->getResultArray();
+    }
+
+    public function mutasiSalesDetail(int $produkId, ?string $tglDari = null, ?string $tglSampai = null, ?int $salesId = null): array
+    {
+        $sql = "SELECT ms.*, p.nama as nama_produk, p.kode_produk, p.satuan, u.nama as sales_nama
+                FROM mutasi_sales ms
+                JOIN produk p ON p.id = ms.produk_id
+                LEFT JOIN users u ON u.id = ms.sales_id
+                WHERE ms.produk_id = ? AND ms.created_at::date >= ? AND ms.created_at::date <= ?";
+        $params = [$produkId, $tglDari, $tglSampai];
+        if ($salesId) {
+            $sql .= " AND ms.sales_id = ?";
+            $params[] = $salesId;
+        }
+        $sql .= " ORDER BY ms.created_at ASC";
+        return $this->db->query($sql, $params)->getResultArray();
+    }
 }

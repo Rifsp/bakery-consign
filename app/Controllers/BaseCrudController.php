@@ -130,11 +130,15 @@ class BaseCrudController extends BaseController
     protected function prepareData(?array $existing = null): array
     {
         $data = [];
+
+        if ($this->tableConfig->autoCode && !$existing) {
+            $data[$this->tableConfig->autoCode] = $this->model->generateAutoCode();
+        }
+
         $fields = $this->tableConfig->getFormFieldsWithoutPk();
 
         foreach ($fields as $field) {
             if ($field->name === $this->tableConfig->autoCode && !$existing) {
-                $data[$field->name] = $this->model->generateAutoCode();
                 continue;
             }
 
@@ -147,7 +151,6 @@ class BaseCrudController extends BaseController
             } elseif ($field->type === 'integer') {
                 $data[$field->name] = $value !== '' ? (int)$value : null;
             } elseif ($field->type === 'select') {
-                // Handle select fields - set to null if empty
                 $data[$field->name] = $value !== '' ? $value : null;
             } else {
                 $data[$field->name] = $value;
@@ -161,14 +164,27 @@ class BaseCrudController extends BaseController
     {
         $rules = [];
 
+        $notNulls = $this->model->getNotNullColumns();
+
         foreach ($this->tableConfig->getFormFieldsWithoutPk() as $field) {
             if ($field->validation) {
                 $rule = $field->validation;
                 if ($id && strpos($rule, 'is_unique') !== false) {
-                    $rule = str_replace(',', ",{$id},", $rule);
+                    if (preg_match('/is_unique\[([^\]]+)\]/', $rule, $matches)) {
+                        $inner = $matches[1];
+                        if (strpos($inner, ',') === false) {
+                            $rule = str_replace(
+                                $matches[0],
+                                'is_unique[' . $inner . ',id,' . $id . ']',
+                                $rule
+                            );
+                        }
+                    }
                 }
                 $rules[$field->name] = $rule;
             } elseif ($field->required) {
+                $rules[$field->name] = 'required';
+            } elseif (in_array($field->name, $notNulls) && $field->type !== 'boolean') {
                 $rules[$field->name] = 'required';
             }
         }

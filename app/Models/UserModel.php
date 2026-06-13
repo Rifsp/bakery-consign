@@ -36,7 +36,38 @@ class UserModel extends Model
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
-    protected $afterFind      = [];
+    protected $afterFind      = ['convertPgBooleans'];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    protected function convertPgBooleans(array $data): array
+    {
+        if (!isset($data['data']) || $data['data'] === null) {
+            return $data;
+        }
+
+        $booleanFields = ['is_aktif'];
+
+        $rows = $data['data'];
+        $isAssoc = is_array($rows) && count(array_filter(array_keys($rows), 'is_string')) > 0;
+
+        if ($isAssoc) {
+            $rows = [$rows];
+        }
+
+        foreach ($rows as &$row) {
+            if (!is_array($row)) {
+                continue;
+            }
+            foreach ($booleanFields as $field) {
+                if (isset($row[$field])) {
+                    $row[$field] = $row[$field] === 't' || $row[$field] === true || $row[$field] === 1;
+                }
+            }
+        }
+
+        $data['data'] = $isAssoc ? $rows[0] : $rows;
+
+        return $data;
+    }
 }

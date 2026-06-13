@@ -1,10 +1,8 @@
-/* ========== DIANTRA BAKERY APP — CUSTOM JS ========== */
-
 ;(function() {
   'use strict';
 
   // === PAGE LOADER ===
-  const loader = document.getElementById('pageLoader');
+  var loader = document.getElementById('pageLoader');
   if (loader) {
     window.addEventListener('load', function() {
       setTimeout(function() {
@@ -13,6 +11,29 @@
       }, 150);
     });
   }
+
+  // === SELECT2 ===
+  function initSelect2(el) {
+    if (typeof jQuery === 'undefined' || typeof $.fn.select2 === 'undefined') return;
+    $(el).select2({
+      width: '100%',
+      placeholder: $(el).data('placeholder') || '-- Pilih --',
+      allowClear: true
+    });
+  }
+
+  if (typeof jQuery !== 'undefined' && typeof $.fn.select2 !== 'undefined') {
+    $('select.select2').each(function() { initSelect2(this); });
+  }
+
+  // reinit select2 inside a container (for dynamic rows)
+  window.reinitSelect2 = function(container) {
+    if (typeof jQuery === 'undefined' || typeof $.fn.select2 === 'undefined') return;
+    $(container).find('select.select2').each(function() {
+      if ($(this).data('select2')) $(this).select2('destroy');
+      initSelect2(this);
+    });
+  };
 
   // === DATATABLES ===
   if (typeof jQuery !== 'undefined' && typeof $.fn.DataTable !== 'undefined') {

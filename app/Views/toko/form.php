@@ -9,6 +9,14 @@
 
     <div class="card shadow mb-4">
         <div class="card-body">
+            <?php if (session()->getFlashdata('errors')): ?>
+                <div class="alert alert-danger">
+                    <?php foreach (session()->getFlashdata('errors') as $error): ?>
+                        <p class="mb-0"><?= esc($error) ?></p>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+
             <form action="<?= base_url($config->route . ($record ? '/update' : '/store') . ($record ? '/' . $record['id'] : '')) ?>" method="POST">
                 <?= csrf_field() ?>
 
@@ -54,7 +62,7 @@
 
                 <div class="form-group">
                     <label for="sales_id">Sales</label>
-                    <select class="form-control" id="sales_id" name="sales_id" >
+                    <select class="form-control select2" id="sales_id" name="sales_id" >
                         <option value="">-- Pilih --</option>
                         <?php 
                         $salesOptions = (new \App\Models\UserModel())->where('role', 'sales')->where('is_aktif', TRUE)->findAll();

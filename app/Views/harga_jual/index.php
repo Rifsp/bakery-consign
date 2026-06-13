@@ -52,15 +52,15 @@
                             <td><?= esc($record['nama_harga']) ?></td>
                             <td><?= number_format($record['harga'], 0, ',', '.') ?></td>
                             <td><?= number_format($record['fee_sales'], 0, ',', '.') ?></td>
-                            <td><?= $record['is_aktif'] ? '<span class="badge badge-success">Aktif</span>' : '<span class="badge badge-secondary">Nonaktif</span>' ?></td>
+                            <td><?= $record['is_aktif'] ? '<span class="badge badge-success">Aktif</span>' : '<span class="badge badge-danger">Nonaktif</span>' ?></td>
                             <td>
                                 <a href="<?= base_url('/harga-jual/edit/' . $record['id']) ?>" class="btn btn-sm btn-primary">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <form action="<?= base_url('/harga-jual/delete/' . $record['id']) ?>" method="POST" style="display:inline">
                                     <?= csrf_field() ?>
-                                    <button type="submit" class="btn btn-sm btn-danger btn-delete-confirm" data-confirm="Yakin hapus data ini?">
-                                        <i class="fas fa-trash"></i>
+                                    <button type="submit" class="btn btn-sm <?= $record['is_aktif'] ? 'btn-warning' : 'btn-success' ?> btn-delete-confirm" data-confirm="Yakin <?= $record['is_aktif'] ? 'nonaktifkan' : 'aktifkan' ?> data ini?">
+                                        <i class="fas <?= $record['is_aktif'] ? 'fa-ban' : 'fa-check' ?>"></i>
                                     </button>
                                 </form>
                             </td>

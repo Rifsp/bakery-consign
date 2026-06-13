@@ -16,7 +16,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="sales_id">Sales Tujuan</label>
-                            <select class="form-control" id="sales_id" name="sales_id" required>
+                            <select class="form-control select2" id="sales_id" name="sales_id" required>
                                 <option value="">-- Pilih Sales --</option>
                                 <?php foreach ($salesList as $s): ?>
                                 <option value="<?= $s['id'] ?>" <?= old('sales_id') == $s['id'] ? 'selected' : '' ?>>
@@ -61,7 +61,7 @@
                             <tr class="item-row">
                                 <td class="text-center row-number">1</td>
                                 <td>
-                                    <select name="items[0][produk_id]" class="form-control produk-select" required>
+                                    <select name="items[0][produk_id]" class="form-control produk-select select2" required>
                                         <option value="">-- Pilih --</option>
                                         <?php foreach ($produkList as $p): ?>
                                         <option value="<?= $p['id'] ?>" data-nama="<?= esc($p['nama']) ?>">
@@ -121,7 +121,7 @@ document.getElementById('addRow').addEventListener('click', function() {
     row.innerHTML = `
         <td class="text-center row-number">${rowIndex + 1}</td>
         <td>
-            <select name="items[${rowIndex}][produk_id]" class="form-control produk-select" required>
+            <select name="items[${rowIndex}][produk_id]" class="form-control produk-select select2" required>
                 <option value="">-- Pilih --</option>
                 <?php foreach ($produkList as $p): ?>
                 <option value="<?= $p['id'] ?>" data-nama="<?= esc($p['nama']) ?>">
@@ -144,6 +144,7 @@ document.getElementById('addRow').addEventListener('click', function() {
         </td>
     `;
     tbody.appendChild(row);
+    reinitSelect2(row);
     rowIndex++;
     renumberRows();
     updateRemoveButtons();

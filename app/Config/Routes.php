@@ -97,6 +97,8 @@ $routes->get('/laporan/fee-sales', 'Laporan::feeSales');
 $routes->get('/laporan/stok-sales-saya', 'Laporan::stokSalesSaya');
 $routes->get('/laporan/stok-toko-saya', 'Laporan::stokTokoSaya');
 $routes->get('/laporan/stok-toko-detail/(:num)', 'Laporan::stokTokoDetail/$1');
+$routes->get('/laporan/mutasi', 'Laporan::mutasi');
+$routes->get('/laporan/mutasi-detail-json', 'Laporan::mutasiDetailJson');
 $routes->get('/laporan/export-csv/(:any)', 'Laporan::exportCsv/$1');
 
 
@@ -115,4 +117,4 @@ $routes->get('/user/create', 'User::create');
 $routes->post('/user/store', 'User::store');
 $routes->get('/user/edit/(:num)', 'User::edit/$1');
 $routes->post('/user/update/(:num)', 'User::update/$1');
-$routes->get('/user/delete/(:num)', 'User::delete/$1');
+$routes->post('/user/delete/(:num)', 'User::delete/$1');

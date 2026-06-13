@@ -151,9 +151,10 @@ class HargaJual extends BaseCrudController
         }
 
         $produkId = $record['produk_id'];
-        $this->model->delete($id);
+        $this->model->update($id, ['is_aktif' => !$record['is_aktif']]);
+        $status = $record['is_aktif'] ? 'dinonaktifkan' : 'diaktifkan';
 
         return redirect()->to($this->baseRoute . '?produk_id=' . $produkId)
-            ->with('success', 'Harga jual berhasil dihapus');
+            ->with('success', 'Harga jual berhasil ' . $status);
     }
 }

@@ -9,7 +9,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered table-sm table-datatable">
-                    <thead><tr><th>No</th><th>Kode</th><th>Produk</th><th>Satuan</th><th>HPP</th><th>Stok</th><th>Update</th></tr></thead>
+                    <thead><tr><th>No</th><th>Kode</th><th>Produk</th><th>Satuan</th><th>HPP</th><th>Stok</th></tr></thead>
                     <tbody>
                         <?php foreach ($records as $i => $r): ?>
                         <tr>
@@ -19,7 +19,6 @@
                             <td><?= esc($r['satuan']) ?></td>
                             <td class="text-right"><?= number_format($r['hpp'], 0, ',', '.') ?></td>
                             <td class="text-right"><?= $r['stok_tersedia'] ?></td>
-                            <td><?= $r['updated_at'] ?></td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
