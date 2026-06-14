@@ -76,7 +76,7 @@
                         <div class="row g-2 align-items-center">
                             <div class="col-12 col-md-4">
                                 <label class="form-label small mb-0 d-md-none">Produk</label>
-                                <select name="items[0][produk_id]" class="form-control form-control-sm produk-select select2" required>
+                                <select name="items[0][produk_id]" class="form-control form-control-sm produk-select" required>
                                     <option value="">-- Pilih --</option>
                                     <?php foreach ($produkList as $p): 
                                         $stok = $stokSalesMap[$p['id']] ?? 0;
@@ -90,7 +90,7 @@
                             </div>
                             <div class="col-12 col-md-3">
                                 <label class="form-label small mb-0 d-md-none">Tier Harga</label>
-                                <select name="items[0][harga_jual_id]" class="form-control form-control-sm tier-select select2" required disabled>
+                                <select name="items[0][harga_jual_id]" class="form-control form-control-sm tier-select" required disabled>
                                     <option value="">-- Pilih Produk dulu --</option>
                                 </select>
                             </div>
@@ -164,14 +164,14 @@ document.getElementById('addRow').addEventListener('click', function() {
         <div class="row g-2 align-items-center">
             <div class="col-12 col-md-4">
                 <label class="form-label small mb-0 d-md-none">Produk</label>
-                <select name="items[${idx}][produk_id]" class="form-control form-control-sm produk-select select2" required>
+                <select name="items[${idx}][produk_id]" class="form-control form-control-sm produk-select" required>
                     <option value="">-- Pilih --</option>
                     <?= $produkOpts ?>
                 </select>
             </div>
             <div class="col-12 col-md-3">
                 <label class="form-label small mb-0 d-md-none">Tier Harga</label>
-                <select name="items[${idx}][harga_jual_id]" class="form-control form-control-sm tier-select select2" required disabled>
+                <select name="items[${idx}][harga_jual_id]" class="form-control form-control-sm tier-select" required disabled>
                     <option value="">-- Pilih Produk dulu --</option>
                 </select>
             </div>
