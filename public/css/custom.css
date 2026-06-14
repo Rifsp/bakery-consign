@@ -318,3 +318,37 @@ footer.py-4 {
 
 /* === CONFIRM DIALOG OVERLAY === */
 .btn-delete-confirm { cursor: pointer; }
+
+/* === MOBILE SIDEBAR FIX === */
+@media (max-width: 991.98px) {
+  #sidebarToggle {
+    position: relative;
+    z-index: 1050;
+  }
+  .sb-nav-fixed #layoutSidenav #layoutSidenav_nav {
+    z-index: 1040;
+  }
+  .sb-nav-fixed #layoutSidenav #layoutSidenav_nav .sb-sidenav {
+    padding-top: var(--sb-topnav-height);
+  }
+  .sb-nav-fixed.sb-sidenav-toggled #layoutSidenav #layoutSidenav_nav {
+    width: var(--sb-sidenav-width);
+    transform: translateX(0);
+    box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+  }
+  .sb-nav-fixed #layoutSidenav #layoutSidenav_nav {
+    width: 0;
+    transform: translateX(-100%);
+    transition: all 0.3s ease;
+  }
+  .sb-topnav .navbar-brand {
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+  }
+  .sb-topnav .navbar-nav {
+    flex-shrink: 0;
+  }
+}
