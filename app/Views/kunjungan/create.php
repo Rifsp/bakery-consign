@@ -38,7 +38,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="toko_id">Toko Tujuan</label>
-                            <select class="form-control select2" id="toko_id" name="toko_id" required>
+                            <select class="form-control" id="toko_id" name="toko_id" required>
                                 <option value="">-- Pilih Toko --</option>
                                 <?php foreach ($tokoList as $t): ?>
                                 <option value="<?= $t['id'] ?>" <?= old('toko_id') == $t['id'] ? 'selected' : '' ?>>
@@ -79,7 +79,7 @@
                         <div class="row g-2 align-items-center">
                             <div class="col-12 col-md-4">
                                 <label class="form-label small mb-0 d-md-none">Produk</label>
-                                <select name="penjualan_items[0][produk_id]" class="form-control form-control-sm produk-select select2" data-section="penjualan">
+                                <select name="penjualan_items[0][produk_id]" class="form-control form-control-sm produk-select" data-section="penjualan">
                                     <option value="">-- Pilih --</option>
                                     <?php foreach ($produkList as $p): ?>
                                     <option value="<?= $p['id'] ?>" data-nama="<?= esc($p['nama']) ?>">
@@ -143,7 +143,7 @@
                         <div class="row g-2 align-items-center">
                             <div class="col-12 col-md-4">
                                 <label class="form-label small mb-0 d-md-none">Produk</label>
-                                <select name="retur_items[0][produk_id]" class="form-control form-control-sm produk-select select2" data-section="retur">
+                                <select name="retur_items[0][produk_id]" class="form-control form-control-sm produk-select" data-section="retur">
                                     <option value="">-- Pilih --</option>
                                     <?php foreach ($produkList as $p): ?>
                                     <option value="<?= $p['id'] ?>" data-nama="<?= esc($p['nama']) ?>">
@@ -312,7 +312,7 @@ function addPenjualanRow() {
         <div class="row g-2 align-items-center">
             <div class="col-12 col-md-4">
                 <label class="form-label small mb-0 d-md-none">Produk</label>
-                <select name="penjualan_items[${idx}][produk_id]" class="form-control form-control-sm produk-select select2" data-section="penjualan">
+                <select name="penjualan_items[${idx}][produk_id]" class="form-control form-control-sm produk-select" data-section="penjualan">
                     <option value="">-- Pilih --</option>
                     <?php foreach ($produkList as $p): ?>
                     <option value="<?= $p['id'] ?>" data-nama="<?= esc($p['nama']) ?>">
@@ -375,7 +375,7 @@ function addReturRow() {
         <div class="row g-2 align-items-center">
             <div class="col-12 col-md-4">
                 <label class="form-label small mb-0 d-md-none">Produk</label>
-                <select name="retur_items[${idx}][produk_id]" class="form-control form-control-sm produk-select select2" data-section="retur">
+                <select name="retur_items[${idx}][produk_id]" class="form-control form-control-sm produk-select" data-section="retur">
                     <option value="">-- Pilih --</option>
                     <?php foreach ($produkList as $p): ?>
                     <option value="<?= $p['id'] ?>" data-nama="<?= esc($p['nama']) ?>">
