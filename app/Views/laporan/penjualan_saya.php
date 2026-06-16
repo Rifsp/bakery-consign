@@ -17,7 +17,9 @@
                 <table class="table table-bordered table-sm table-datatable">
                     <thead><tr><th>No</th><th>Nomor Jual</th><th>Tgl</th><th>Toko</th><th>Total Harga</th><th>Aksi</th></tr></thead>
                     <tbody>
+                        <?php $sumHarga = 0; ?>
                         <?php foreach ($records as $i => $r): ?>
+                        <?php $sumHarga += $r['total_harga']; ?>
                         <tr>
                             <td><?= $i + 1 ?></td>
                             <td><?= esc($r['nomor_jual']) ?></td>
@@ -28,6 +30,13 @@
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
+                    <tfoot>
+                        <tr class="font-weight-bold bg-light">
+                            <td colspan="4" class="text-right">Total</td>
+                            <td class="text-right"><?= number_format($sumHarga, 0, ',', '.') ?></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>

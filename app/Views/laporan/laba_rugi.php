@@ -36,7 +36,9 @@
                 <table class="table table-bordered table-sm table-datatable" id="dataTable">
                     <thead><tr><th>No</th><th>Tgl</th><th>Toko</th><th>Sales</th><th>Produk</th><th>Qty</th><th>Harga</th><th>Fee</th><th>HPP</th><th>Subtotal</th><th>Laba</th></tr></thead>
                     <tbody>
+                        <?php $sumQty = 0; $sumSubtotal = 0; $sumLaba = 0; ?>
                         <?php foreach ($records as $i => $r): ?>
+                        <?php $sumQty += $r['jumlah_terjual']; $sumSubtotal += $r['subtotal_harga']; $sumLaba += $r['laba_bersih']; ?>
                         <tr>
                             <td><?= $i + 1 ?></td>
                             <td><?= $r['tanggal'] ?></td>
@@ -52,6 +54,17 @@
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
+                    <tfoot>
+                        <tr class="font-weight-bold bg-light">
+                            <td colspan="5" class="text-right">Total</td>
+                            <td class="text-right"><?= number_format($sumQty, 0, ',', '.') ?></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right"><?= number_format($sumSubtotal, 0, ',', '.') ?></td>
+                            <td class="text-right <?= $sumLaba < 0 ? 'text-danger' : '' ?>"><?= number_format($sumLaba, 0, ',', '.') ?></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
