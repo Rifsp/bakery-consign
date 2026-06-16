@@ -23,7 +23,9 @@
                 <table class="table table-bordered table-sm table-datatable">
                     <thead><tr><th>No</th><th>Sales</th><th>Tgl</th><th>Toko</th><th>Produk</th><th>Qty</th><th>Fee Satuan</th><th>Total Fee</th></tr></thead>
                     <tbody>
+                        <?php $sumQty = 0; $sumFee = 0; ?>
                         <?php foreach ($records as $i => $r): ?>
+                        <?php $sumQty += $r['jumlah_terjual']; $sumFee += $r['total_fee']; ?>
                         <tr>
                             <td><?= $i + 1 ?></td>
                             <td><?= esc($r['nama_sales']) ?></td>
@@ -36,6 +38,14 @@
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
+                    <tfoot>
+                        <tr class="font-weight-bold bg-light">
+                            <td colspan="5" class="text-right">Total</td>
+                            <td class="text-right"><?= number_format($sumQty, 0, ',', '.') ?></td>
+                            <td></td>
+                            <td class="text-right"><?= number_format($sumFee, 0, ',', '.') ?></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>

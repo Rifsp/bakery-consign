@@ -21,7 +21,9 @@
                 <table class="table table-bordered table-sm table-datatable">
                     <thead><tr><th>No</th><th>Sales</th><th>Kode</th><th>Produk</th><th>Satuan</th><th>Stok</th></tr></thead>
                     <tbody>
+                        <?php $sumStok = 0; ?>
                         <?php foreach ($records as $i => $r): ?>
+                        <?php $sumStok += $r['stok_tersedia']; ?>
                         <tr>
                             <td><?= $i + 1 ?></td>
                             <td><?= esc($r['nama_sales']) ?></td>
@@ -32,6 +34,12 @@
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
+                    <tfoot>
+                        <tr class="font-weight-bold bg-light">
+                            <td colspan="5" class="text-right">Total</td>
+                            <td class="text-right"><?= number_format($sumStok, 0, ',', '.') ?></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
