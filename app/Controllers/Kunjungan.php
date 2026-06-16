@@ -236,6 +236,23 @@ class Kunjungan extends BaseController
 
     private function processPenjualan(int $kunjunganId, int $tokoId, int $salesId, string $tanggal, array $items): void
     {
+        $validItems = [];
+        foreach ($items as $item) {
+            $produkId = (int) ($item['produk_id'] ?? 0);
+            $jumlahTerjual = (int) ($item['jumlah_terjual'] ?? 0);
+            $hargaSatuan = (float) ($item['harga_satuan'] ?? 0);
+            $hargaJualId = (int) ($item['harga_jual_id'] ?? 0);
+
+            if (!$produkId || $jumlahTerjual <= 0 || $hargaSatuan <= 0 || !$hargaJualId) {
+                continue;
+            }
+            $validItems[] = $item;
+        }
+
+        if (empty($validItems)) {
+            return;
+        }
+
         $penjualanModel = new PenjualanModel();
         $detailModel = new PenjualanDetailModel();
         $stokTokoModel = new StokTokoModel();
@@ -255,17 +272,13 @@ class Kunjungan extends BaseController
         $runningHarga = 0;
         $runningFee = 0;
 
-        foreach ($items as $item) {
+        foreach ($validItems as $item) {
             $produkId = (int) ($item['produk_id'] ?? 0);
             $jumlahTerjual = (int) ($item['jumlah_terjual'] ?? 0);
             $hargaSatuan = (float) ($item['harga_satuan'] ?? 0);
             $feeSatuan = (float) ($item['fee_satuan'] ?? 0);
             $hppSatuan = (float) ($item['hpp_satuan'] ?? 0);
             $hargaJualId = (int) ($item['harga_jual_id'] ?? 0);
-
-            if (!$produkId || $jumlahTerjual <= 0 || $hargaSatuan <= 0 || !$hargaJualId) {
-                continue;
-            }
 
             $stokToko = $stokTokoModel->getStok($tokoId, $produkId);
             if ($jumlahTerjual > $stokToko) {
@@ -296,6 +309,21 @@ class Kunjungan extends BaseController
 
     private function processRetur(int $kunjunganId, int $tokoId, int $salesId, string $tanggal, array $items): void
     {
+        $validItems = [];
+        foreach ($items as $item) {
+            $produkId = (int) ($item['produk_id'] ?? 0);
+            $jumlahRetur = (int) ($item['jumlah_retur'] ?? 0);
+
+            if (!$produkId || $jumlahRetur <= 0) {
+                continue;
+            }
+            $validItems[] = $item;
+        }
+
+        if (empty($validItems)) {
+            return;
+        }
+
         $returModel = new ReturModel();
         $detailModel = new ReturDetailModel();
 
@@ -311,7 +339,7 @@ class Kunjungan extends BaseController
             'alasan' => 'Retur dari toko',
         ]);
 
-        foreach ($items as $item) {
+        foreach ($validItems as $item) {
             $produkId = (int) ($item['produk_id'] ?? 0);
             $jumlahRetur = (int) ($item['jumlah_retur'] ?? 0);
             $kondisi = $item['kondisi'] ?? 'baik';
@@ -320,10 +348,6 @@ class Kunjungan extends BaseController
                 $tglExpired = null;
             }
             $keterangan = $item['keterangan'] ?? '';
-
-            if (!$produkId || $jumlahRetur <= 0) {
-                continue;
-            }
 
             $detailModel->insert([
                 'retur_id' => $returId,
